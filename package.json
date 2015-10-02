@@ -1,0 +1,13 @@
+{
+    "authors":
+    ["Daranix", "myami"],
+    "directories":
+    [],
+    "gtamp_dependencies":
+    [],
+    "homepage":"http://gta-mp.net",
+    "license":"",
+    "main":"main.js",
+    "name":"Five Battleroyale",
+    "version":"1.0.0"
+}
