@@ -82,11 +82,11 @@ Utility.print = (msg) => {
 Utility.timestamp = () => {
 	let d = new Date();
 	let year = d.getFullYear();
-	let month = d.getMonth();
-	let day = d.getDate();
-	let hour = d.getHours();
-	let min = d.getMinutes();
-	let secs = d.getSeconds();
+	let month = Utility.PutCero(d.getMonth());
+	let day = Utility.PutCero(d.getDate());
+	let hour = Utility.PutCero(d.getHours());
+	let min = Utility.PutCero(d.getMinutes());
+	let secs = Utility.PutCero(d.getSeconds());
 	let time = "[" + day + "/" + month + "/" + year + "][" + hour + ":" + min + ":" + secs + "]";
 	return time;
 };
@@ -126,7 +126,7 @@ Utility.sphere = class Sphere { // By Tirus
 
 Utility.sphere.prototype.inRangeOfPoint = function(position) { // By Tirus
 
-	console.log(position.x);
+	//console.log(position.x);
 	return (Math.pow((position.x - this.x), 2) +
             Math.pow((position.y - this.y), 2) +
             Math.pow((position.z - this.z), 2) < Math.pow(this.radius, 2));
@@ -139,22 +139,44 @@ Utility.RandomInt = (min, max) => {
 
 
 Utility.IsPointInCircle = function(v1, v2, radius) {
-  if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return false;
-  else return true;
+  if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
+  else return false;
 }
 
+
 Utility.GetDistanceBetweenPoints = function(v1, v2) {
-  //return (Math.sqrt(Math.pow(Math.abs(v1.x, v2.x),2)) + Math.sqrt(Math.pow(Math.abs(v1.y, v2.y),2))) + Math.sqrt(Math.pow(Math.abs(v1.z, v2.z),2));
-  return (Math.sqrt(Math.pow(Math.abs(v1.x, v2.x),2)) + Math.sqrt(Math.pow(Math.abs(v1.y, v2.y),2))) + Math.sqrt(Math.pow(Math.abs(v1.z, v2.z),2));
+	const dx = Math.abs(v1.x - v2.x);
+	const dy = Math.abs(v1.y - v2.y);
+	const dz = Math.abs(v1.z - v2.z);
+	return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
 }
 
 Utility.GetDistanceBetweenPointsXY = function(v1, v2) {
   let v13f = new Vector3f(v1.x, v1.y, 0.0);
   let v14f = new Vector3f(v2.x, v2.y, 0.0);
+  //console.log("Distante between points" + Utility.GetDistanceBetweenPoints(v13f, v14f));
   return Utility.GetDistanceBetweenPoints(v13f, v14f);
 
 }
 
 Utility.debugMsg = function(msg) {
 	if(gm.config.debug) console.log("[DEBUG] " + msg);
+}
+
+Utility.msToMinutes = function(ms) {
+	return (ms / 1000) / 60;
+}
+
+Utility.PutCero = function(n) {
+	if(n >= 0 && n <= 9) {
+		return "0" + n;
+	} else return n;
+}
+
+Utility.round = function(value, decimals) {
+	return parseFloat(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+Utility.RandomFloat = function(min, max) {
+	return (Math.random() * (min - max) + max);
 }

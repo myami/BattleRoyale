@@ -46,6 +46,11 @@ commands.set("startBattle", (player) => {
   gm.events.OnBattleStart();
 });
 
+commands.set("endBattle", (player) => {
+  clearTimeout(EndBattle);
+  gm.events.OnBattleEnd();
+});
+
 commands.set("seespawns", (player) => {
 
   for(let i = 0; i < gm.spawns.spawn.length; i++) {
@@ -67,4 +72,25 @@ commands.set("reduceArea", (player) => {
     gm.events.OnBattleAreaChange();
   }, gm.utility.minutes(3));
 
+});
+
+commands.set("inbattlearea", (player) => {
+  if(gm.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+    player.SendChatMessage("You are in range of battle area circle");
+  } else {
+    player.SendChatMessage("You aren't in range of battle area circle");
+  }
+});
+
+commands.set("survival" , (player) => {
+  console.log(g_pingame.length);
+});
+
+commands.set("msToMinutes", (player) => {
+  let tim = (15 * 1000) * 60;
+  player.SendChatMessage("15000 ms = " + gm.utility.msToMinutes(tim))
+});
+
+commands.set("roundTime", (player) => {
+  player.SendChatMessage(gm.utility.PutCero(timeLeft.minutes) + ":" + gm.utility.PutCero(timeLeft.seconds));
 });

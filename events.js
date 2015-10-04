@@ -185,7 +185,7 @@ Events.onPlayerDestroyed = player => {
  Events.Checks = () => {
 
   //console.log("Check!");
-  gm.utility.print("Check!");
+  //gm.utility.print("Check!");
 
   if(!Started)
   {
@@ -212,7 +212,19 @@ Events.onPlayerDestroyed = player => {
         // Change player health -2
         setInterval(function() { gm.events.OnPlayerOutArea(player); }, gm.utility.seconds(15));
       }
+
+      //timeLeft.seconds -= 1;
+
     }
+
+      if(timeLeft.seconds <= 0) {
+        timeLeft.minutes -= 1;
+        timeLeft.seconds = 59; 
+      } else {
+        timeLeft.seconds -= 1;
+      }
+
+      gm.utility.print(timeLeft.minutes + ":" + timeLeft.seconds);
   }
 
 
@@ -226,11 +238,9 @@ Events.onPlayerDestroyed = player => {
       player.position = gm.config.game.lobbypos;
       console.log(player.name + " X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
     }
-
-
   }
 
-  // Here check if player was on the area ...
+
 
  };
 
@@ -239,6 +249,9 @@ Events.onPlayerDestroyed = player => {
 */
 
 Events.OnBattleStart = () => {
+
+
+  timeLeft.minutes = gm.utility.msToMinutes(gm.config.game.roundTime);
 
   console.log("Battle started!");
   Started = true;
@@ -277,22 +290,29 @@ Events.OnBattleStart = () => {
  Events.OnBattleEnd = (player) => {
 
   if(typeof player === 'undefined') { // if the round ends with more than 1 player alive.
-    let survivorcount;
+    
+    /*let survivorcount;
     for(let player of g_players) {
       if(pInGame[player.name]) {
         survivorcount++;
       }
-    }
+    }*/
 
-    gm.utility.broadcastMessage(survivorcount + " people survived to the battle");
+    gm.utility.broadcastMessage(g_pingame.length + " people survived to the battle");
     gm.utility.broadcastMessage("Survivors: ");
 
-    for(let player of g_players) {
+    /*for(let player of g_players) {
       if(pInGame[player.name]) {
         pInGame[player.name] = false
         player.position = gm.config.game.lobbypos;
         gm.utility.broadcastMessage(" - " + player.name);
       }
+    }*/
+
+    for(let player of g_pingame) {
+      pInGame[player.name] = false;
+      player.position = gm.config.game.lobbypos;
+      gm.utility.broadcastMessage(" - " + player.name);
     }
 
   } else { // if round gots a winner
@@ -301,6 +321,9 @@ Events.OnBattleStart = () => {
     player.position = gm.config.game.lobbypos;
   }
 
+  clearInterval(AreaTimer);
+  Started = false;
+  g_pingame = [];
   gm.utility.broadcastMessage("A new battle is going to start soon!");
 };
 
@@ -315,9 +338,9 @@ Events.OnBattleAreaChange = () => {
 
   gm.utility.broadcastMessage("Battle area changed, look to the map");
 
-  let rnd = gm.utility.RandomInt(0, g_pingame.length);
+  let rnd = gm.utility.RandomInt(0, g_pingame.length - 1);
   let areaPos = g_pingame[rnd].position;
-  let rad = battleArea.radius / 2
+  let rad = battleArea.radius / 2;
   battleArea = { position: areaPos, radius: rad }
 
 

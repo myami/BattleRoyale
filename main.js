@@ -31,6 +31,7 @@ global.Started = false;
 global.g_pingame = [];
 global.AreaTimer;
 global.battleArea;
+global.timeLeft = { minutes: 0, seconds: 0 };
 
 
 
@@ -61,7 +62,6 @@ function main () {
   setInterval(function() {
     gm.events.Checks();
   }, 1000);
-
 
 }
 
