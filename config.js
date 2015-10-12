@@ -19,12 +19,12 @@ module.exports = {
     interiors: [],
     capInteriors: true
   },
-  mysql: {
+  /*mysql: {
     host     : '127.0.0.1',
     user     : 'root',
     password : 'root',
     database : 'gamemode'
-  },
+  },*/
   game: {
 	  minPlayers: 5,
 	  //roundTime: gm.utility.minutes(15),

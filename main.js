@@ -33,12 +33,9 @@ global.AreaTimer;
 global.battleArea;
 global.timeLeft = { minutes: 0, seconds: 0 };
 
-
-
-
-
 global.gm = {
-  
+  commandManager: new (require('./commandManager.js'))(),
+  commands: require('./commands/commands.js'),
   events: require('./events.js'),
   utility: require('./utility.js'),
   config: require('./config.js'),
@@ -55,10 +52,10 @@ global.gm = {
 function main () {
   console.log("Registering Events...");
   gm.events.register();
-  // gm.system.init();
+  console.log('Registering Commands...');
+  gm.commands(gm.commandManager.add.bind(gm.commandManager));
   console.log("Server started!");
- //  Query(8080); //You can change your port
-
+  
   setInterval(function() {
     gm.events.Checks();
   }, 1000);

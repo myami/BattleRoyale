@@ -11,8 +11,9 @@ Utility.hashes = require('./hashes/hashes');
  * @param {RGB=} [opt_color] color of the message
  */
 Utility.broadcastMessage = (message, opt_color) => {
-  for (let player of g_players) {
-    player.SendChatMessage(message, opt_color);
+  //for (let player of gtamp.players) {
+  for(let i = 0; i < gtamp.players.length; i++) {
+    gtamp.players[i].SendChatMessage(message, opt_color);
   }
 };
 
@@ -26,47 +27,48 @@ Utility.broadcastMessage = (message, opt_color) => {
  * @return {Player} An array with the players found with the id or the name,
  *                  only contains the first one found if allowDuplicates was false, empty array if no player was found
  */
-Utility.getPlayer = (idOrName, opt_allowDuplicates, opt_caseSensitive) => {
-  let allowDuplicates = opt_allowDuplicates || false;
-  let caseSensitive = opt_caseSensitive || false;
+Utility.getPlayer = function(idOrName, opt_allowDuplicates, opt_caseSensitive) {
+	let allowDuplicates = opt_allowDuplicates || false;
+	let caseSensitive = opt_caseSensitive || false;
 	let id = parseInt(idOrName);
 	let fnCheck;
 
 	if (isNaN(id)) {
-		if(caseSensitive === false) {
-			idOrName = idOrName.toLowerCase();
-		}
+	  if(caseSensitive === false) {
+	    idOrName = idOrName.toLowerCase();
+	  }
 
-		// define fnCheck to check the players name
-		fnCheck = target => {
-			let targetName;
-			if(caseSensitive === false) {
-				//ignore capital letters
-				targetName = target.name.toLowerCase();
-			}
-      else {
-				// do not ignore capital letters
-				targetName = target.name;
-			}
-			if (targetName.indexOf(idOrName) === 0) {
-				return true;
-			}
-			return false;
-		};
+	  // define fnCheck to check the players name
+	  fnCheck = target => {
+	    let targetName;
+	    if(caseSensitive === false) {
+	      //ignore capital letters
+	      targetName = target.name.toLowerCase();
+	    }
+	    else {
+	      // do not ignore capital letters
+	      targetName = target.name;
+	    }
+	    if (targetName.indexOf(idOrName) === 0) {
+	      return true;
+	    }
+	    return false;
+	  };
 	}
-  else {
-		fnCheck = target => target.client.networkId === id;
+	else {
+	  fnCheck = target => target.client.networkId === id;
 	}
 
 	let playerArray = [];
-	for (let tempPlayer of g_players) {
-		if (fnCheck(tempPlayer)) {
-			playerArray.push(tempPlayer);
-			if(allowDuplicates === false) {
-				// exit the loop, because we just return the first player found
-				break;
-			}
-		}
+	for (let i = 0; i < gtamp.players.length; i++) {
+	  const tempPlayer = gtamp.players[i];
+	  if (fnCheck(tempPlayer)) {
+	    playerArray.push(tempPlayer);
+	    if(allowDuplicates === false) {
+	      // exit the loop, because we just return the first player found
+	      break;
+	    }
+	  }
 	}
 	return playerArray;
 };
