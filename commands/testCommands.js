@@ -37,7 +37,7 @@ module.exports = function(register) {
 	});
 
 	register('endBattle', function(player) {
-	  clearTimeout(EndBattle);
+	  clearTimeout(global.EndTimer);
 	  gm.events.OnBattleEnd();
 	});
 

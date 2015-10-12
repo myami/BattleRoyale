@@ -119,7 +119,7 @@ Events.onPlayerCreated = player => {
     }
   }
 
-  pInGame[player.name] = false;
+  player.ingame = false;
   player.SendChatMessage("Welcome to the server battleroyale : ", new RGB(0, 255, 0));
   player.SendChatMessage("<em>Write /help to see the commands</em>");
 };
@@ -152,8 +152,8 @@ Events.onPlayerDeath = (player, reason, killer) => {
     tempPlayer.graphics.ui.DisplayMessage(message);
   }*/
 
-  if(pInGame[player.name]) {
-    pInGame[player.name] = false;
+  if(player.ingame) {
+    player.ingame = false;
     player.position = gm.config.game.lobbypos;
     let index = g_pingame.indexOf(player);
     g_pingame.splice(index, 1);
@@ -236,7 +236,7 @@ Events.onPlayerDestroyed = player => {
   // Check if the players on the lobby was in lobby area or not.
 
   for(let player of gtamp.players) {
-    if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !pInGame[player.name]) {
+    if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !player.ingame) {
 
       console.log(player.name + " was not in lobby area"); 
       console.log("changing player position");
@@ -277,7 +277,7 @@ Events.OnBattleStart = () => {
   let spawnPos = new Vector3f(data.x, data.y, data.z);
 
   for(let player of gtamp.players) {
-    pInGame[player.name] = true;
+    player.ingame = true;
     g_pingame.push(player);
     player.position = spawnPos;
   }
@@ -298,7 +298,7 @@ Events.OnBattleStart = () => {
     
     /*let survivorcount;
     for(let player of g_players) {
-      if(pInGame[player.name]) {
+      if(player.ingame) {
         survivorcount++;
       }
     }*/
@@ -307,22 +307,22 @@ Events.OnBattleStart = () => {
     gm.utility.broadcastMessage("Survivors: ");
 
     /*for(let player of g_players) {
-      if(pInGame[player.name]) {
-        pInGame[player.name] = false
+      if(player.ingame) {
+        player.ingame = false
         player.position = gm.config.game.lobbypos;
         gm.utility.broadcastMessage(" - " + player.name);
       }
     }*/
 
     for(let player of g_pingame) {
-      pInGame[player.name] = false;
+      player.ingame = false;
       player.position = gm.config.game.lobbypos;
       gm.utility.broadcastMessage(" - " + player.name);
     }
 
   } else { // if round gots a winner
     gm.utility.broadcastMessage(player.name + "was the winner of battle royale!");
-    pInGame[player.name] = false;
+    player.ingame = false;
     player.position = gm.config.game.lobbypos;
   }
 
