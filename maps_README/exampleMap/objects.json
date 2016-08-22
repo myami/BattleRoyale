@@ -1,0 +1,13 @@
+[{
+    "position": {
+        "x": 1.0,
+        "y": 2.0,
+        "z": 3.0
+    },
+    "rotation": {
+        "x": 4.0,
+        "y": 5.0,
+        "z": 6.0
+    },
+    "model": "barrel explosive"
+}]

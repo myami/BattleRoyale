@@ -7,29 +7,9 @@
  */
 "use strict";
 
-let peds = require('./peds');
-let weapons = require('./weapons');
 let vehicles = require('./vehicles');
-let objects = require('./objects');
-let blips = require('./blips');
 
 class Hashes {
-  /**
-   * Returns all Ped hashes (and their names, see peds.js)
-   *
-   * @returns {Array} array of all ped models
-   */
-  static get peds() {
-    return peds;
-  }
-  /**
-   * Returns all Weapon hashes (and their names, see weapons.js)
-   *
-   * @returns {Array} array of all weapon models
-   */
-  static get weapons() {
-    return weapons;
-  }
   /**
    * Returns all Vehicle hashes (and their names, see vehicles.js)
    *
@@ -37,23 +17,6 @@ class Hashes {
    */
   static get vehicles() {
     return vehicles;
-  }
-  /**
-   * Returns all Objects hashes (and their names, see objects.js)
-   *
-   * @returns {Array} array of all object models
-   */
-  static get objects() {
-    return objects;
-  }
-  
-  /**
-   * Returns all Blip hashes (and their names, see blips.js)
-   *
-   * @returns {Array} array of all blip items
-   */
-  static get blips() {
-    return blips;
   }
 
   /**
@@ -65,10 +28,10 @@ class Hashes {
    */
   static findByName(target, name) {
     for (let obj of target) {
-      if (typeof obj.n === "undefined" || typeof obj.h === "undefined") {
+      if (typeof obj.name === "undefined" || typeof obj.hash === "undefined") {
         continue;
       }
-      if (obj.n === name) {
+      if (obj.name === name) {
         return obj;
       }
     }
@@ -87,17 +50,17 @@ class Hashes {
 
 	let fnCheck = objName => {
 	  objName = objName.toLowerCase();
-	  if (objName.indexOf(partOfName) === 0) {
+	  if (objName.indexOf(partOfName) != -1) {
 	    return true;
 	  }
 	  return false;
 	};
 
     for (let obj of target) {
-      if (typeof obj.n === "undefined" || typeof obj.h === "undefined") {
+      if (typeof obj.name === "undefined" || typeof obj.hash === "undefined") {
         continue;
       }
-      if (obj.n === partOfName || fnCheck(obj.n)) {
+      if (obj.name === partOfName || fnCheck(obj.name)) {
         return obj;
       }
     }
@@ -113,10 +76,10 @@ class Hashes {
    */
   static findByHash(target, hash) {
     for (let obj of target) {
-      if (typeof obj.n === "undefined" || typeof obj.h === "undefined") {
+      if (typeof obj.name === "undefined" || typeof obj.hash === "undefined") {
         continue;
       }
-      if (obj.n === hash) {
+      if (obj.hash === hash) {
         return obj;
       }
     }
