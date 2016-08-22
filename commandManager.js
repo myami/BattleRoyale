@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+=======
+/**
+ * @overview GTA:Multiplayer Default Package: Command Manager
+ * @author Jan "Waffle" C.
+ * @copyright (c) GTA:Multiplayer [gta-mp.net]
+ * @license https://master.gta-mp.net/LICENSE
+ */
+>>>>>>> origin/master
 'use strict';
 
 module.exports = class CommandManager {
@@ -14,7 +23,11 @@ module.exports = class CommandManager {
    */
   handle(player, command, args) {
     // We can't just use this.commands.has because we have to be insensitive here :(
+<<<<<<< HEAD
     const low = command.toLowerCase();
+=======
+    const low = command.toString().toLowerCase();
+>>>>>>> origin/master
     args.unshift(player);
 
     // Not using forEach either as we want to break early

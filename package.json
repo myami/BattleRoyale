@@ -1,6 +1,21 @@
 {
+<<<<<<< HEAD
 	"name": "Jc3-BattleRoyale",
 	"author" : "Myami,Daranix",
 	"version" : "0.0.1"
 
 }
+=======
+    "authors":
+    ["Daranix", "myami"],
+    "directories":
+    [],
+    "gtamp_dependencies":
+    [],
+    "homepage":"http://gta-mp.net",
+    "license":"",
+    "main":"main.js",
+    "name":"Five_Battleroyale",
+    "version":"1.0.0"
+}
+>>>>>>> origin/master

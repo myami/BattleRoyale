@@ -8,6 +8,11 @@
 "use strict";
 
 let vehicles = require('./vehicles');
+<<<<<<< HEAD
+=======
+let objects = require('./objects');
+let blips = require('./blips');
+>>>>>>> origin/master
 
 class Hashes {
   /**
@@ -18,6 +23,26 @@ class Hashes {
   static get vehicles() {
     return vehicles;
   }
+<<<<<<< HEAD
+=======
+  /**
+   * Returns all Objects hashes (and their names, see objects.js)
+   *
+   * @returns {Array} array of all object models
+   */
+  static get objects() {
+    return objects;
+  }
+  
+  /**
+   * Returns all Blip hashes (and their names, see blips.js)
+   *
+   * @returns {Array} array of all blip items
+   */
+  static get blips() {
+    return blips;
+  }
+>>>>>>> origin/master
 
   /**
    * Finds a certain hash by its name

@@ -28,13 +28,26 @@ global.battleArea;
 global.timeLeft = { minutes: 0, seconds: 0 };
 
 global.gm = {
+<<<<<<< HEAD
   commandManager: new (require('./commandManager'))(),
   config: require('./config'),
   utility: require('./utility'),
   mapHandler: null,
+=======
+  commandManager: new (require('./commandManager.js'))(),
+  commands: require('./commands/commands.js'),
+  events: require('./events.js'),
+  utility: require('./utility.js'),
+  config: require('./config.js'),
+  spawns: require('./spawns.js')
+  //mysql:   require('./node_modules/mysql'),
+  //system: require('./system.js')
+
+>>>>>>> origin/master
 };
 
 function main () {
+<<<<<<< HEAD
   const retn = events.Call('MapHandler');
   if (retn.length > 0) {
     gm.mapHandler = retn[0];
@@ -76,14 +89,25 @@ function main () {
   }, true);
 
 /*
+=======
+  console.log("Registering Events...");
+  gm.events.register();
+  console.log('Registering Commands...');
+  gm.commands(gm.commandManager.add.bind(gm.commandManager));
+  console.log("Server started!");
+  
+>>>>>>> origin/master
   setInterval(function() {
     gm.events.Checks();
   }, 1000);   */
 
 
 
+<<<<<<< HEAD
 
 	console.log('Server started.');
+=======
+>>>>>>> origin/master
 }
 
 main();
