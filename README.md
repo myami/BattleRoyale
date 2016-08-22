@@ -1,2 +1,2 @@
 # BattleRoyale
-Gamemode for GTA:MP
+Gamemode for JC3:MP
