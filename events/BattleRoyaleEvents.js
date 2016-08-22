@@ -9,7 +9,7 @@ events.Add("Checks", function()
 
 if(!Started)
 {
-  if(!beingStart && gtamp.players.length >= gm.config.game.minPlayers)
+  if(!beingStart && jcmp.players.length >= gm.config.game.minPlayers)
   {
     gm.utility.broadcastMessage("Minimum number of players reached to start");
     gm.utility.broadcastMessage("Game is going to start in 3 minutes");
@@ -19,10 +19,10 @@ if(!Started)
     }, gm.utility.minutes(3));
   }
 
-  if(beingStart && gtamp.players.length < gm.config.game.minPlayers)
+  if(beingStart && jcmp.players.length < gm.config.game.minPlayers)
   {
     clearTimeout(beingStartTimer);
-    let needplayers = gm.config.game.minPlayers - gtamp.players.length;
+    let needplayers = gm.config.game.minPlayers - jcmp.players.length;
     gm.utility.broadcastMessage("Need " + needplayers + " players more");
   }
 } else { // if Started == true
@@ -50,7 +50,7 @@ if(!Started)
 
 // Check if the players on the lobby was in lobby area or not.
 
-for(let player of gtamp.players) {
+for(let player of jcmp.players) {
   if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !player.ingame) {
 
     console.log(player.name + " was not in lobby area");
@@ -87,7 +87,7 @@ events.Add("OnBattleStart", function()
   let data = gm.spawns.spawn[rnd];
   let spawnPos = new Vector3f(data.x, data.y, data.z);
 
-  for(let player of gtamp.players) {
+  for(let player of jcmp.players) {
     player.ingame = true;
     g_pingame.push(player);
     player.position = spawnPos;
