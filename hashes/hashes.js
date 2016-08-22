@@ -1,6 +1,7 @@
 /**
  * @overview GTA:Multiplayer Default Package: Hashes
  * @author Jan "Waffle" C.
+ * @author Martin "funkrusha" S.
  * @copyright (c) GTA:Multiplayer [gta-mp.net]
  * @license https://master.gta-mp.net/LICENSE
  */
@@ -10,6 +11,7 @@ let peds = require('./peds');
 let weapons = require('./weapons');
 let vehicles = require('./vehicles');
 let objects = require('./objects');
+let blips = require('./blips');
 
 class Hashes {
   /**
@@ -44,6 +46,16 @@ class Hashes {
   static get objects() {
     return objects;
   }
+  
+  /**
+   * Returns all Blip hashes (and their names, see blips.js)
+   *
+   * @returns {Array} array of all blip items
+   */
+  static get blips() {
+    return blips;
+  }
+
   /**
    * Finds a certain hash by its name
    *
@@ -62,7 +74,7 @@ class Hashes {
     }
     return;
   }
-  
+
   /**
    * Finds a certain hash by part of its name
    *
@@ -72,7 +84,7 @@ class Hashes {
    */
   static findByPartOfName(target, partOfName) {
 	partOfName = partOfName.toLowerCase();
-	
+
 	let fnCheck = objName => {
 	  objName = objName.toLowerCase();
 	  if (objName.indexOf(partOfName) === 0) {
@@ -80,7 +92,7 @@ class Hashes {
 	  }
 	  return false;
 	};
-	
+
     for (let obj of target) {
       if (typeof obj.n === "undefined" || typeof obj.h === "undefined") {
         continue;

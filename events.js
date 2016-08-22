@@ -5,7 +5,6 @@
  * @namespace
  */
 let Events = module.exports;
-let commands = require('./commands');
 
 /**
  * Registers all Events.
@@ -73,22 +72,28 @@ Events.onChatMessage = (player, message) => {
  * @param {string} command the command
  */
 Events.onChatCommand = (player, command) => {
-  let args = command.split(" ");
+    let args = command.match(/('(\\'|[^'])*'|"(\\"|[^"])*"|\/(\\\/|[^\/])*\/|(\\ |[^ ])+|[\w-]+)/g) || [];
 
-  // Let's check if this crazy thing ever happens.
-  if (args.length === 0) {
-    throw "This should NEVER happen.";
-  }
-  let commandName = args.splice(0, 1)[0];
-
-  for (const command of commands) {
-    if (command[0].toLowerCase() === commandName.toLowerCase()) {
-      command[1](player, args);
-      return true;
+    for(var i=1;i<args.length;i++)
+    {
+      if( args[i].substr(0, 1) === '"' || args[i].substr(0,1) === "'" ) {
+        args[i] = JSON.parse(args[i]);
+      }
     }
+
+    // Let's check if this crazy thing ever happens.
+    if (args.length === 0) {
+      throw "This should NEVER happen.";
+    }
+
+    let commandName = args.splice(0, 1)[0];
+
+    if (!gm.commandManager.handle(player, commandName, args)) {
+      player.SendChatMessage("Unknown command.", new RGB(255, 59, 59));
+    }
+
+    
   }
-  player.SendChatMessage("Unknown command.", new RGB(255, 59, 59));
-};
 
 /**
  * Called when a new Player was created (after he connected)
@@ -114,7 +119,7 @@ Events.onPlayerCreated = player => {
     }
   }
 
-  pInGame[player.name] = false;
+  player.ingame = false;
   player.SendChatMessage("Welcome to the server battleroyale : ", new RGB(0, 255, 0));
   player.SendChatMessage("<em>Write /help to see the commands</em>");
 };
@@ -147,8 +152,8 @@ Events.onPlayerDeath = (player, reason, killer) => {
     tempPlayer.graphics.ui.DisplayMessage(message);
   }*/
 
-  if(pInGame[player.name]) {
-    pInGame[player.name] = false;
+  if(player.ingame) {
+    player.ingame = false;
     player.position = gm.config.game.lobbypos;
     let index = g_pingame.indexOf(player);
     g_pingame.splice(index, 1);
@@ -185,11 +190,11 @@ Events.onPlayerDestroyed = player => {
  Events.Checks = () => {
 
   //console.log("Check!");
-  gm.utility.print("Check!");
+  //gm.utility.print("Check!");
 
   if(!Started)
   {
-    if(!beingStart && g_players.length >= gm.config.game.minPlayers)
+    if(!beingStart && gtamp.players.length >= gm.config.game.minPlayers)
     {
       gm.utility.broadcastMessage("Minimum number of players reached to start");
       gm.utility.broadcastMessage("Game is going to start in 3 minutes");
@@ -199,10 +204,10 @@ Events.onPlayerDestroyed = player => {
       }, gm.utility.minutes(3));
     }
 
-    if(beingStart && g_players.length < gm.config.game.minPlayers)
+    if(beingStart && gtamp.players.length < gm.config.game.minPlayers)
     {
       clearTimeout(beingStartTimer);
-      let needplayers = gm.config.game.minPlayers - g_players.length;
+      let needplayers = gm.config.game.minPlayers - gtamp.players.length;
       gm.utility.broadcastMessage("Need " + needplayers + " players more");
     }
   } else { // if Started == true
@@ -212,25 +217,35 @@ Events.onPlayerDestroyed = player => {
         // Change player health -2
         setInterval(function() { gm.events.OnPlayerOutArea(player); }, gm.utility.seconds(15));
       }
+
+      //timeLeft.seconds -= 1;
+
     }
+
+      if(timeLeft.seconds <= 0) {
+        timeLeft.minutes -= 1;
+        timeLeft.seconds = 59; 
+      } else {
+        timeLeft.seconds -= 1;
+      }
+
+      gm.utility.print(timeLeft.minutes + ":" + timeLeft.seconds);
   }
 
 
   // Check if the players on the lobby was in lobby area or not.
 
-  for(let player of g_players) {
-    if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !pInGame[player.name]) {
+  for(let player of gtamp.players) {
+    if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !player.ingame) {
 
       console.log(player.name + " was not in lobby area"); 
       console.log("changing player position");
       player.position = gm.config.game.lobbypos;
       console.log(player.name + " X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
     }
-
-
   }
 
-  // Here check if player was on the area ...
+
 
  };
 
@@ -239,6 +254,9 @@ Events.onPlayerDestroyed = player => {
 */
 
 Events.OnBattleStart = () => {
+
+
+  timeLeft.minutes = gm.utility.msToMinutes(gm.config.game.roundTime);
 
   console.log("Battle started!");
   Started = true;
@@ -258,8 +276,8 @@ Events.OnBattleStart = () => {
   let data = gm.spawns.spawn[rnd];
   let spawnPos = new Vector3f(data.x, data.y, data.z);
 
-  for(let player of g_players) {
-    pInGame[player.name] = true;
+  for(let player of gtamp.players) {
+    player.ingame = true;
     g_pingame.push(player);
     player.position = spawnPos;
   }
@@ -277,30 +295,40 @@ Events.OnBattleStart = () => {
  Events.OnBattleEnd = (player) => {
 
   if(typeof player === 'undefined') { // if the round ends with more than 1 player alive.
-    let survivorcount;
+    
+    /*let survivorcount;
     for(let player of g_players) {
-      if(pInGame[player.name]) {
+      if(player.ingame) {
         survivorcount++;
       }
-    }
+    }*/
 
-    gm.utility.broadcastMessage(survivorcount + " people survived to the battle");
+    gm.utility.broadcastMessage(g_pingame.length + " people survived to the battle");
     gm.utility.broadcastMessage("Survivors: ");
 
-    for(let player of g_players) {
-      if(pInGame[player.name]) {
-        pInGame[player.name] = false
+    /*for(let player of g_players) {
+      if(player.ingame) {
+        player.ingame = false
         player.position = gm.config.game.lobbypos;
         gm.utility.broadcastMessage(" - " + player.name);
       }
+    }*/
+
+    for(let player of g_pingame) {
+      player.ingame = false;
+      player.position = gm.config.game.lobbypos;
+      gm.utility.broadcastMessage(" - " + player.name);
     }
 
   } else { // if round gots a winner
     gm.utility.broadcastMessage(player.name + "was the winner of battle royale!");
-    pInGame[player.name] = false;
+    player.ingame = false;
     player.position = gm.config.game.lobbypos;
   }
 
+  clearInterval(AreaTimer);
+  Started = false;
+  g_pingame = [];
   gm.utility.broadcastMessage("A new battle is going to start soon!");
 };
 
@@ -315,9 +343,9 @@ Events.OnBattleAreaChange = () => {
 
   gm.utility.broadcastMessage("Battle area changed, look to the map");
 
-  let rnd = gm.utility.RandomInt(0, g_pingame.length);
+  let rnd = gm.utility.RandomInt(0, g_pingame.length - 1);
   let areaPos = g_pingame[rnd].position;
-  let rad = battleArea.radius / 2
+  let rad = battleArea.radius / 2;
   battleArea = { position: areaPos, radius: rad }
 
 
