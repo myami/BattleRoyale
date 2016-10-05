@@ -31,6 +31,7 @@ global.gm = {
   commandManager: new (require('./commandManager'))(),
   config: require('./config'),
   utility: require('./utility'),
+  sphere: require('./sphere.js'),
   mapHandler: null,
 };
 

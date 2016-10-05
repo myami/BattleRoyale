@@ -202,20 +202,9 @@ static RandomInt  (min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-static sphere = class Sphere { // By Tirus
 
-    constructor(x, y, z, opt_radius) {
-	    this.x = x;
-	    this.y = y;
-	    this.z = z;
-	    this.radius = opt_radius || 1;
-    }
+sphere.prototype.inRangeOfPoint (position) { 
 
-}
-
-static sphere.prototype.inRangeOfPoint (position) { // By Tirus
-
-	//console.log(position.x);
 	return (Math.pow((position.x - this.x), 2) +
             Math.pow((position.y - this.y), 2) +
             Math.pow((position.z - this.z), 2) < Math.pow(this.radius, 2));
