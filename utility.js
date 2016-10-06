@@ -207,13 +207,15 @@ module.exports = class Utility {
   }
 
   // probleme here
-  sphere.prototype.inRangeOfPoint (position) {
+  /*sphere.prototype.inRangeOfPoint (position) {
 
   	return (Math.pow((position.x - this.x), 2) +
               Math.pow((position.y - this.y), 2) +
               Math.pow((position.z - this.z), 2) < Math.pow(this.radius, 2));
-  }
+  }*/
 //
+ 
+  
   static IsPointInCircle(v1, v2, radius) {
     if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
     else return false;
