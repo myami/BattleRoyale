@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = class Sphere {
+module.exports = class Sphere { // created by Tirus from gtamp
   /**
    *
    * @param {number} x

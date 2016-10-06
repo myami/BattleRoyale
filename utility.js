@@ -201,10 +201,6 @@ module.exports = class Utility {
 
   }
 
-  static RandomInt  (min, max) {
-  	return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   static IsPointInCircle(v1, v2, radius) {
     if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
     else return false;
@@ -218,7 +214,6 @@ module.exports = class Utility {
   static GetDistanceBetweenPointsXY (v1, v2) {
     let v13f = new Vector3f(v1.x, v1.y, 0.0);
     let v14f = new Vector3f(v2.x, v2.y, 0.0);
-    //console.log("Distante between points" + Utility.GetDistanceBetweenPoints(v13f, v14f));
     return Utility.GetDistanceBetweenPoints(v13f, v14f);
 
   }
@@ -240,39 +235,5 @@ module.exports = class Utility {
   static RandomFloat (min, max) {
   	return (Math.random() * (min - max) + max);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
