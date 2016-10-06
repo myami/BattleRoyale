@@ -15,13 +15,13 @@ module.exports = function({ Command, manager }) {
       .handler((player, name) => {
         const w = weapons.filter(weapon => weapon.name.match(new RegExp(name, 'ig')));
         if (w.length === 0) {
-          mode.chat.send(player, 'found no matching weapons!', mode.config.color.red);
+          gm.chat.send(player, 'found no matching weapons!', gm.config.color.red);
           return;
         } else if (w.length > 1) {
-          mode.chat.send(player, 'found too many weapons. using the first available.', mode.config.color.purple);
+          gm.chat.send(player, 'found too many weapons. using the first available.', gm.config.color.purple);
         }
 
-        mode.chat.send(player, `have fun with your ${w[0].name}!`, mode.config.color.green);
+        gm.chat.send(player, `have fun with your ${w[0].name}!`, gm.config.color.green);
         player.GiveWeapon(w[0].hash, 300, true);
       }));
 }

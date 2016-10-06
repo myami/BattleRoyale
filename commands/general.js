@@ -5,7 +5,7 @@ module.exports = function({ Command, manager }) {
     .add(new Command('test')
       .description('this commands does nothing.')
       .handler(player => {
-        mode.chat.send(player, 'as I told you, nothing.');
+        gm.chat.send(player, 'as I told you, nothing.');
       }))
 
     // note that there was no semicolon in the last line, so the manager.category chain is still here!
@@ -17,7 +17,7 @@ module.exports = function({ Command, manager }) {
       .parameter('text', 'string', 'echo value', { isTextParameter: true })
       .description('sends you back the same message you sent')
       .handler((player, text) => {
-        mode.chat.send(player, `echo: ${text}`);
+        gm.chat.send(player, `echo: ${text}`);
       }))
 
 

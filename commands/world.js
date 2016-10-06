@@ -19,10 +19,10 @@ module.exports = function({ Command, manager }) {
         jcmp.players.forEach(p => {
           p.world.SetTime(hour, minute, 0);
         });
-        mode.world.time.hour = hour;
-        mode.world.time.minute = minute;
+        gm.world.time.hour = hour;
+        gm.world.time.minute = minute;
 
-        chat.broadcast(`${player.name} has set the time to ${hour}:${minute}!`, mode.config.color.orange);
+        chat.broadcast(`${player.name} has set the time to ${hour}:${minute}!`, gm.config.color.orange);
       }))
 
     // /weather [preset name]
@@ -51,8 +51,8 @@ module.exports = function({ Command, manager }) {
         jcmp.players.forEach(p => {
           p.world.weather = idx;
         });
-        mode.world.weather = idx;
+        gm.world.weather = idx;
 
-        chat.broadcast(`${player.name} has set the weather to '${weather}'!`, mode.config.color.orange);
+        chat.broadcast(`${player.name} has set the weather to '${weather}'!`, gm.config.color.orange);
       }))
 };

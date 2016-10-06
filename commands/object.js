@@ -14,6 +14,6 @@ module.exports = function({ Command, manager }) {
         const obj = new GameObject(object, player.aimPosition);
         obj.dimension = player.dimension;
 
-        mode.chat.send(player, `Created object '${object}'.`, mode.config.color.green);
+        gm.chat.send(player, `Created object '${object}'.`, gm.config.color.green);
       }));
 };

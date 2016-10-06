@@ -22,8 +22,8 @@ global.battleArea;
 global.timeLeft = { minutes: 0, seconds: 0 };
 
 
-// making 'mode' available in all files
-global.mode = {
+// making 'gm' available in all files
+global.gm = {
   commands: events.Call('get_command_manager')[0],
   chat: events.Call('get_chat')[0],
   config: require('./config'),
@@ -37,10 +37,10 @@ global.mode = {
 
 function main () {
   // load all commands from the 'commands' directory
-  mode.commands.loadFromDirectory(`${__dirname}/commands`, (f, ...a) => require(f)(...a));
+  gm.commands.loadFromDirectory(`${__dirname}/commands`, (f, ...a) => require(f)(...a));
 
   // load all event files from the 'events' directory
-  mode.utility.loadFilesFromDirectory(`${__dirname}/events`);
+  gm.utility.loadFilesFromDirectory(`${__dirname}/events`);
   console.log('Server started.');
 }
 
