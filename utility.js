@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const sphere = require ('../sphere');
 
 module.exports = class Utility {
 
