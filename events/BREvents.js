@@ -143,9 +143,7 @@ events.Add("OnBattleEnd", function()
 
 events.Add("OnBattleAreaChange", function()
 {
-  /*for(let player of g_pingame) {
-
-}*/
+  
 
 gm.utility.broadcastMessage("Battle area changed, look to the map");
 

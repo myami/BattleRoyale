@@ -1,1 +1,0 @@
-Move the `maps` directory into your JC3:MP servers root directory (where the Server binary is located)

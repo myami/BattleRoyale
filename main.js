@@ -1,17 +1,10 @@
 'use strict';
+// global error handler: if we do not catch an exception, log it here. don't rely on this, though.
 
 
 
 
-
-
-
-
-
-
-
-
-
+process.on('uncaughtException', e => console.error(e.stack || e));
 
 
 // player variables
@@ -20,6 +13,7 @@ global.pInGame = []; // false = on Lobby
 global.beingStart = false;
 global.beingStartTimer;
 //global.StartTimer;
+//battleroyale variables
 global.EndTimer;
 global.Started = false;
 global.g_pingame = [];
@@ -27,66 +21,27 @@ global.AreaTimer;
 global.battleArea;
 global.timeLeft = { minutes: 0, seconds: 0 };
 
-global.gm = {
-  commandManager: new (require('./commandManager'))(),
+
+// making 'mode' available in all files
+global.mode = {
+  commands: events.Call('get_command_manager')[0],
+  chat: events.Call('get_chat')[0],
   config: require('./config'),
   utility: require('./utility'),
-  sphere: require('./sphere.js'),
-  mapHandler: null,
+
+  world: {
+    time: { hour: 12, minute: 0 },
+    weather: 0,
+  },
 };
 
 function main () {
-  const retn = events.Call('MapHandler');
-  if (retn.length > 0) {
-    gm.mapHandler = retn[0];
+  // load all commands from the 'commands' directory
+  mode.commands.loadFromDirectory(`${__dirname}/commands`, (f, ...a) => require(f)(...a));
 
-    gm.mapHandler.load('exampleMap')
-      .then(map => {
-        console.log(`map ${map.name} loaded with ${map.items.size} items.`);
-      })
-      .catch(err => {
-        console.log(`error loading example map: ${err.stack}`);
-      });
-  }
-
-
-  console.info('loading commands from directory');
-  gm.utility.rreaddir(__dirname + '/commands', (err, list) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
-    list.forEach(f => {
-      require('./commands/' + f)(gm.commandManager.add.bind(gm.commandManager));
-    });
-    console.info(list.length + ' command files loaded.');
-  }, true);
-
-  console.info('loading events from directory');
-  gm.utility.rreaddir(__dirname + '/events', (err, list) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
-    list.forEach(f => {
-      require('./events/' + f);
-    });
-    console.info(list.length + ' event files loaded.');
-  }, true);
-
-/*
-  setInterval(function() {
-    gm.events.Checks();
-  }, 1000);   */
-
-
-
-
-	console.log('Server started.');
+  // load all event files from the 'events' directory
+  mode.utility.loadFilesFromDirectory(`${__dirname}/events`);
+  console.log('Server started.');
 }
 
 main();
-// TEMPORARY WORKAROUND FOR nJC3MP SCRIPTING ISSUE (https://gitlab.nanos.io/jc3mp/scripting/issues/1)
-setInterval(() => {}, 500);

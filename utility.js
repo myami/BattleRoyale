@@ -2,79 +2,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const hashes = require('./hashes/hashes');
+const sphere = require ('../sphere');
 
 module.exports = class Utility {
-  /**
-    * Hashes
-  */
-  static get hashes() {
-    return hashes;
-  }
-
-  /**
-   * Broadcasts a Message to all Players.
-   *
-   * @param {string} message the message to broadcast.
-   * @param {RGB} [color] color of the message
-   */
-  static broadcastMessage(message, color) {
-    for (let i = 0; i < jcmp.players.length; i++) {
-      jcmp.players[i].SendChatMessage(message, color);
-    }
-  }
-
-  /**
-   * Recursively reads a directory.
-   *
-   * @param {String} dir - dir
-   * @param {function(err: Error, list: Array.<String>)} done - callback
-   * @param {Boolean} [filesOnly=false] - whether to include only files in the result
-   */
-  static rreaddir(dir, done, filesOnly) {
-    filesOnly = filesOnly || false;
-    let pending = 0;
-    let files = [];
-    fs.readdir(dir, (err, list) => {
-      if (err) {
-        return done(err, files);
-      }
-      pending = list.length;
-
-      list.forEach(f => {
-        fs.stat(path.join(dir, f), (err, stat) => {
-          if (err) {
-            console.warn('skipping file because we couldnt stat it in rreaddir: ' + err);
-            if (!pending--) {
-              return done(undefined, files);
-            }
-            return;
-          }
-
-
-          if (stat.isDirectory()) {
-            if (!filesOnly) {
-              files.push(f);
-            }
-            Utility.rreaddir(f, (err, rlist) => {
-              rlist.forEach(rf => files.push(rf));
-
-              pending--;
-              if (!pending) {
-                return done(undefined, files);
-              }
-            }, filesOnly);
-          } else {
-            files.push(f);
-            pending--;
-            if (!pending) {
-              return done(undefined, files);
-            }
-          }
-        });
-      });
-    })
-  }
 
   /**
   * Returns the player from his id or (part of his) Name
@@ -161,90 +91,196 @@ module.exports = class Utility {
     return 'Unknown';
   }
 
-static print (message){
-  let fmsg = Utility.timestamp() + " " + message;
-  console.log(fmsg);
-  /*let f = gm.fs("./logs/general.txt");
-  f.write(fmsg+ "\n");
-  f.end();*/
-}
-static timestamp (){
-  let d = new Date();
-	let year = d.getFullYear();
-	let month = Utility.PutCero(d.getMonth());
-	let day = Utility.PutCero(d.getDate());
-	let hour = Utility.PutCero(d.getHours());
-	let min = Utility.PutCero(d.getMinutes());
-	let secs = Utility.PutCero(d.getSeconds());
-	let time = "[" + day + "/" + month + "/" + year + "][" + hour + ":" + min + ":" + secs + "]";
-	return time;
+  /**
+   * Recursively reads a directory.
+   *
+   * @param {string} dir - dir
+   * @param {function(err: Error, list: Array.<string>)} done - callback
+   * @param {boolean} [filesOnly=false] - whether to include only files in the result
+   */
+  static rreaddir(dir, done, filesOnly = false) {
+    let pending = 0;
+    let files = [];
+    fs.readdir(dir, (err, list) => {
+      if (err) {
+        return done(err, files);
+      }
+      pending = list.length;
 
-}
-
-static seconds (seconds){
-  return seconds * 1000;
-}
-static minutes (minutes){
-return utility.seconds(60) * minutes
-}
-
-static isInArray (value, array){
-  //return array.indexOf(value) > -1;
-
-let result = array.indexOf(value);
-
-if(result >= 0) return true;
-else return false;
-
-}
-
-static RandomInt  (min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+      list.forEach(f => {
+        fs.stat(path.join(dir, f), (err, stat) => {
+          if (err) {
+            console.warn('skipping file because we couldnt stat it in rreaddir: ' + err);
+            if (!pending--) {
+              return done(undefined, files);
+            }
+            return;
+          }
 
 
-sphere.prototype.inRangeOfPoint (position) { 
+          if (stat.isDirectory()) {
+            if (!filesOnly) {
+              files.push(f);
+            }
+            Utility.rreaddir(f, (err, rlist) => {
+              rlist.forEach(rf => files.push(rf));
 
-	return (Math.pow((position.x - this.x), 2) +
-            Math.pow((position.y - this.y), 2) +
-            Math.pow((position.z - this.z), 2) < Math.pow(this.radius, 2));
-}
+              pending--;
+              if (!pending) {
+                return done(undefined, files);
+              }
+            }, filesOnly);
+          } else {
+            files.push(f);
+            pending--;
+            if (!pending) {
+              return done(undefined, files);
+            }
+          }
+        });
+      });
+    })
+  }
 
-static IsPointInCircle(v1, v2, radius) {
-  if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
+  /**
+   * Loads all files from a directory recursively.
+   *
+   * @param {string} path - path to the directory
+   */
+  static  loadFilesFromDirectory(path) {
+    Utility.rreaddir(path, (err, list) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      list.forEach(f => {
+        require(`${path}/${f}`);
+      });
+      console.info(`${list.length} files loaded from '${path}'.`);
+    }, true);
+  }
+
+
+
+
+
+  static print (message){
+    let fmsg = Utility.timestamp() + " " + message;
+    console.log(fmsg);
+    /*let f = gm.fs("./logs/general.txt");
+    f.write(fmsg+ "\n");
+    f.end();*/
+  }
+  static timestamp (){
+    let d = new Date();
+  	let year = d.getFullYear();
+  	let month = Utility.PutCero(d.getMonth());
+  	let day = Utility.PutCero(d.getDate());
+  	let hour = Utility.PutCero(d.getHours());
+  	let min = Utility.PutCero(d.getMinutes());
+  	let secs = Utility.PutCero(d.getSeconds());
+  	let time = "[" + day + "/" + month + "/" + year + "][" + hour + ":" + min + ":" + secs + "]";
+  	return time;
+
+  }
+
+  static seconds (seconds){
+    return seconds * 1000;
+  }
+  static minutes (minutes){
+  return utility.seconds(60) * minutes
+  }
+
+  static isInArray (value, array){
+    //return array.indexOf(value) > -1;
+
+  let result = array.indexOf(value);
+
+  if(result >= 0) return true;
   else return false;
-}
-static GetDistanceBetweenPoints(v1, v2) {
-	const dx = Math.abs(v1.x - v2.x);
-	const dy = Math.abs(v1.y - v2.y);
-	const dz = Math.abs(v1.z - v2.z);
-	return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
-}
-static GetDistanceBetweenPointsXY (v1, v2) {
-  let v13f = new Vector3f(v1.x, v1.y, 0.0);
-  let v14f = new Vector3f(v2.x, v2.y, 0.0);
-  //console.log("Distante between points" + Utility.GetDistanceBetweenPoints(v13f, v14f));
-  return Utility.GetDistanceBetweenPoints(v13f, v14f);
 
-}
+  }
 
-static debugMsg (message) {
-	if(gm.config.debug) console.log("[DEBUG] " + message);
-}
-static msToMinutes (ms) {
-	return (ms / 1000) / 60;
-}
-static PutCero (n) {
-	if(n >= 0 && n <= 9) {
-		return "0" + n;
-	} else return n;
-}
-static round (value, decimals) {
-	return parseFloat(Math.round(value+'e'+decimals)+'e-'+decimals);
-}
-static RandomFloat (min, max) {
-	return (Math.random() * (min - max) + max);
-}
+  static RandomInt  (min, max) {
+  	return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // probleme here
+  sphere.prototype.inRangeOfPoint (position) {
+
+  	return (Math.pow((position.x - this.x), 2) +
+              Math.pow((position.y - this.y), 2) +
+              Math.pow((position.z - this.z), 2) < Math.pow(this.radius, 2));
+  }
+//
+  static IsPointInCircle(v1, v2, radius) {
+    if(Utility.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
+    else return false;
+  }
+  static GetDistanceBetweenPoints(v1, v2) {
+  	const dx = Math.abs(v1.x - v2.x);
+  	const dy = Math.abs(v1.y - v2.y);
+  	const dz = Math.abs(v1.z - v2.z);
+  	return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+  }
+  static GetDistanceBetweenPointsXY (v1, v2) {
+    let v13f = new Vector3f(v1.x, v1.y, 0.0);
+    let v14f = new Vector3f(v2.x, v2.y, 0.0);
+    //console.log("Distante between points" + Utility.GetDistanceBetweenPoints(v13f, v14f));
+    return Utility.GetDistanceBetweenPoints(v13f, v14f);
+
+  }
+
+  static debugMsg (message) {
+  	if(gm.config.debug) console.log("[DEBUG] " + message);
+  }
+  static msToMinutes (ms) {
+  	return (ms / 1000) / 60;
+  }
+  static PutCero (n) {
+  	if(n >= 0 && n <= 9) {
+  		return "0" + n;
+  	} else return n;
+  }
+  static round (value, decimals) {
+  	return parseFloat(Math.round(value+'e'+decimals)+'e-'+decimals);
+  }
+  static RandomFloat (min, max) {
+  	return (Math.random() * (min - max) + max);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
