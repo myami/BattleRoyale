@@ -157,7 +157,8 @@ battleArea = { position: areaPos, radius: rad }
 
 events.Add("OnPlayerOutArea", function(player)
 {
-  player.SendChatMessage("You not are in the area!!");
-// Change health -2 for example
+  player.SendChatMessage("You not are in the area!! ");
+  player.health -= 100;
+// Die because he is out of the area
 
 });
