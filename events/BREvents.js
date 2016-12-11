@@ -4,8 +4,8 @@
 
 events.Add("Checks", function()
 {
-  //console.log("Check!");
-//gm.utility.print("Check!");
+
+   gm.utility.print("Check!"); //print on the console that the event is run.
 
 if(!Started)
 {
@@ -25,7 +25,7 @@ if(!Started)
     let needplayers = gm.config.game.minPlayers - jcmp.players.length;
     gm.utility.broadcastMessage("Need " + needplayers + " players more");
   }
-} else { // if Started == true
+} else { // if Started == true and the game is launch check if player is out of area
 
   for(let player of g_pingame) { // Check if player was in area.
     if(!gm.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
@@ -51,7 +51,7 @@ if(!Started)
 // Check if the players on the lobby was in lobby area or not.
 
 for(let player of jcmp.players) {
-  if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0) && !player.ingame) {
+  if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, gm.config.game.lobbyradius) && !player.ingame) {
 
     console.log(player.name + " was not in lobby area");
     console.log("changing player position");
@@ -68,8 +68,8 @@ events.Add("OnBattleStart", function()
 
 
   timeLeft.minutes = gm.utility.msToMinutes(gm.config.game.roundTime);
+gm.utility.print("Battle started!!");
 
-  console.log("Battle started!");
   Started = true;
   beingStart = false;
 
@@ -132,6 +132,8 @@ events.Add("OnBattleEnd", function()
     gm.utility.broadcastMessage(player.name + "was the winner of battle royale!");
     player.ingame = false;
     player.position = gm.config.game.lobbypos;
+  
+
   }
 
   clearInterval(AreaTimer);
@@ -159,6 +161,7 @@ events.Add("OnPlayerOutArea", function(player)
 {
   player.SendChatMessage("You not are in the area!! ");
   player.health -= 100;
+  gm.utility.broadcastMessage(player.name + "Die because he is out of the area!");
 // Die because he is out of the area
 
 });

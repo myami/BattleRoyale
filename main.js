@@ -40,8 +40,7 @@ process.on('uncaughtException', e => console.error(e.stack || e));
 // global error handler: if we do not catch an exception, log it here. don't rely on this, though.
 
 
-// player variables
-global.PlayerInfo = [];
+
 //battleroyale variables
 global.pInGame = []; // false = on Lobby
 global.beingStart = false;
@@ -53,6 +52,14 @@ global.g_pingame = [];
 global.AreaTimer;
 global.battleArea;
 global.timeLeft = { minutes: 0, seconds: 0 };
+// player variables
+global.PlayerInfo = [];
+//Other player variables
+global.ConfirmReg = [];
+global.ConfirmPwd = [];
+global.Registered = [];
+global.pLogged    = [];
+
 
 
 global.gm = {
@@ -60,11 +67,13 @@ global.gm = {
   chat: events.Call('get_chat')[0],
   config: require('./config'),
   utility: require('./utility'),
+  mysql:    require('./node_modules/mysql')
 
-  world: {
+
+  /*world: {
     time: { hour: 12, minute: 0 },
     weather: 0,
-  },
+  }*/
 };
 
 function main () {

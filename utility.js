@@ -236,4 +236,76 @@ module.exports = class Utility {
   	return (Math.random() * (min - max) + max);
   }
 
+
+
+  static dbConnect () {
+      gm.utility.print("Server wants to connect");
+    	return gm.mysql.createConnection({
+            host     : gm.config.mysql.host,
+            user     : gm.config.mysql.user,
+            password : gm.config.mysql.password,
+            database : gm.config.mysql.database
+        });
+    }
+
+    static ban (player) {
+
+    	let connection = Utility.dbConnect();
+
+    	connection.connect();
+
+    	let SQLQuery = "UPDATE users SET banned = 1 WHERE id = " + PlayerInfo[player.name].id;
+    	printf(player.name + "a été bannis");
+    	connection.query(SQLQuery);
+
+    	connection.end();
+
+    }
+
+    static unban (player) {
+
+    	let connection = Utility.dbConnect();
+
+
+    	connection.connect();
+
+    	let SQLQuery = "UPDATE users SET banned = 0 WHERE id = " + PlayerInfo[player.name].id;
+    	printf(player.name + "a été débannis");
+    	connection.query(SQLQuery);
+
+    	connection.end();
+
+    }
+    static adminMessage (message, opt_color) {
+        for (let player of jc3mp.players) {
+        if(PlayerInfo[player.name].adminlvl >= 1) {
+          player.SendChatMessage(message, opt_color);
+      }
+      }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

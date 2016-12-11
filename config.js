@@ -8,17 +8,18 @@ module.exports = {
     orange: new RGB(255, 140, 0),
     purple: new RGB(155, 89, 182),
   },
-  /*mysql: {
+  mysql: {
 host     : '127.0.0.1',
 user     : 'root',
 password : 'root',
 database : 'gamemode'
-},*/
+},
 game: {
 minPlayers: 5,
 //roundTime: gm.utility.minutes(15),
 roundTime: (1 * 1000) * 60,
 lobbypos: new Vector3f(3365.0, 2345.0, 0.0),
+lobbyradius: 50,
 startAreaRadius: 300.0
 },
 debug: true
