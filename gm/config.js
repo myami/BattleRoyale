@@ -24,7 +24,7 @@ password : 'iHqlXY2I',
 database : 'sql_web_SRKyBQnF'
 },
 game: {
-minPlayers: 2,
+minPlayers: 1,
 //roundTime: gm.utility.minutes(15),
 roundTime: (1 * 1000) * 60,
 lobbypos: new Vector3f(-13536.0, 1026.0, 14599),

@@ -5,7 +5,7 @@
 events.Add("Checks", function()
 {
 
-   console.log("Check!"); //print on the console that the event is run.
+   //console.log("Check!"); //print on the console that the event is run.
 
 if(!Started)
 {
@@ -93,7 +93,7 @@ console.log("Battle started!!");
     player.position = spawnPos;
   }
 
-   global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius }; // position here is useless
+   global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius };
 
   //battleroyale.utils.LoadVehicles();
 
@@ -159,9 +159,13 @@ battleArea = { position: areaPos, radius: rad }
 
 events.Add("OnPlayerOutArea", function(player)
 {
-  battleroyale.chat.send(player,"You not are in the area!! ");
-  player.health -= 100;
-  battleroyale.chat.broadcast(player.name + "Die because he is out of the area!");
+  if (player.ingame == true)
+  {
+    battleroyale.chat.send(player,"You are not in the area!! ");
+    player.health -= 100;
+    battleroyale.chat.broadcast(player.name + " " +"Die because he is out of the area!");
+  }
+
 // Die because he is out of the area
 
 });

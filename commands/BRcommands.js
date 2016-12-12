@@ -2,7 +2,7 @@
 
 
 
-const utility = require('../gm/utility');
+const utils = require('../gm/utility');
 
 
 module.exports = function({ Command, manager }) {
@@ -11,10 +11,10 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
 // debug commands
     .add(new Command('incircle')
-    .timeout(180000)
+    .timeout(1)
     .description('Check if you are in the circle')
     .handler((player) => {
-    if(battleroyale.utility.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, 100.0)) {
+    if(battleroyale.utils.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius)) {
     battleroyale.chat.send(player,"You are in the circle");
     } else {
     battleroyale.chat.send(player,"You're not in the circle");
@@ -31,42 +31,42 @@ manager.category('battleroyale', 'BattleRoyale related commands')
       }))
 
        .add(new Command('roundTime')
-       .timeout(180000)
+       .timeout(1)
        .description('Check the time of the round')
        .handler((player) => {
-       battleroyale.chat.send(player,battleroyale.utility.PutCero(timeLeft.minutes) + ":" + battleroyale.utility.PutCero(timeLeft.seconds));
+       battleroyale.chat.send(player,battleroyale.utils.PutCero(timeLeft.minutes) + ":" + battleroyale.utils.PutCero(timeLeft.seconds));
         }))
 
             .add(new Command('inbattlearea')
-            .timeout(180000)
+            .timeout(1)
             .description('Check if you are in the area ')
             .handler((player) => {
-            if(battleroyale.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+            if(battleroyale.utils.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
         	  battleroyale.chat.send(player,"You are in range of battle area circle");
             } else {
         	  battleroyale.chat.send(player,"You aren't in range of battle area circle");
         	  }
            }))
              .add(new Command('survival')
-             .timeout(180000)
+             .timeout(1)
              .description('Check the time of the round')
              .handler((player) => {
-             battleroyale.chat.send(player,battleroyale.utility.PutCero(timeLeft.minutes) + ":" + battleroyale.utility.PutCero(timeLeft.seconds));
+             battleroyale.chat.send(player,battleroyale.utils.PutCero(timeLeft.minutes) + ":" + battleroyale.utils.PutCero(timeLeft.seconds));
              }))
                 .add(new Command('reducearea')
-                .timeout(180000)
+                .timeout(1)
                 .description('Reduced area of battle')
                 .handler((player) => {
                  clearInterval(global.AreaTimer);
-                 battleroyale.events.OnBattleAreaChange();
+                 events.Call('OnBattleAreaChange');
                  // Start the interval again
                  global.AreaTimer = setInterval(function() {
-                 battleroyale.events.OnBattleAreaChange();
-                 }, battleroyale.utility.minutes(3));
+                   events.Call('OnBattleAreaChange');
+                 }, battleroyale.utils.minutes(3));
                  }))
 
        .add(new Command('seespawns')
-       .timeout(180000)
+       .timeout(1)
        .description('See the coordinate of the spawns')
        .handler((player) => {
        for(let i = 0; i < battleroyale.spawns.spawn.length; i++) {
@@ -75,15 +75,15 @@ manager.category('battleroyale', 'BattleRoyale related commands')
        }
        }))
          .add(new Command('endBattle')
-         .timeout(180000)
+         .timeout(1)
          .description('End the battleroyale')
          .handler((player) => {
          clearTimeout(global.EndTimer);
-   	     battleroyale.events.OnBattleEnd();
-         }))
+         events.Call('OnBattleEnd');
+                }))
 
      .add(new Command('startBattle')
-     .timeout(180000)
+     .timeout(1)
      .description('start the battleroyale')
      .handler((player) => {
      console.log("battle started!");
@@ -92,7 +92,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
      }))
 
   .add(new Command('gplayers')
-  .timeout(180000)
+  .timeout(1)
   .description('Player in game')
   .handler((player) => {
    console.log("Players: " + g_pingame.length);
@@ -127,7 +127,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
         battleroyale.chat.send(player,"Admin Level must be a number")
       }
 
-      let targets = battleroyale.utility.getPlayer(args[0], false);
+      let targets = battleroyale.utils.getPlayer(args[0], false);
 
       if (targets.length === 0) {
         return battleroyale.chat.send(player,"Cible inconnue.", red);
@@ -167,7 +167,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
       return battleroyale.chat.send(player,"Vous êtes déjà enregistré.");
     }
 
-    let connection = battleroyale.utility.dbConnect();
+    let connection = battleroyale.utils.dbConnect();
 
     connection.connect();
 
@@ -242,7 +242,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
            let password = args.join(" ");
 
-           let connection = battleroyale.utility.dbConnect();
+           let connection = battleroyale.utils.dbConnect();
            connection.connect();
            var sha1 = require('sha1');
            password = connection.escape(password);

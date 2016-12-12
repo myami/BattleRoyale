@@ -83,6 +83,7 @@ events.Add("PlayerReady", (player) => {
 events.Add("PlayerDeath", (player, killer, reason) => {
   let killer_data;
   let death_message = '';
+  player.ingame = false;
   if (typeof killer !== 'undefined' && killer !== null) {
     if (killer.networkId === player.networkId) {
       death_message = 'killed themselves';
@@ -143,7 +144,6 @@ events.Add("PlayerDeath", (player, killer, reason) => {
     death_reason: death_message
   };
   events.CallRemote("battleroyale_player_death", null, JSON.stringify(data));
-
   battleroyale.chat.send(player, 'You will be respawned where you died. If you get stuck, use /respawn to spawn at a random position again.', battleroyale.config.colours.purple);
   const pos = player.position;
   const done = battleroyale.workarounds.watchPlayer(player, setTimeout(() => {
