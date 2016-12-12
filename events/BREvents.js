@@ -5,32 +5,32 @@
 events.Add("Checks", function()
 {
 
-   gm.utility.print("Check!"); //print on the console that the event is run.
+   battleroyale.utility.print("Check!"); //print on the console that the event is run.
 
 if(!Started)
 {
-  if(!beingStart && jcmp.players.length >= gm.config.game.minPlayers)
+  if(!beingStart && jcmp.players.length >= battleroyale.config.game.minPlayers)
   {
-    gm.utility.broadcastMessage("Minimum number of players reached to start");
-    gm.utility.broadcastMessage("Game is going to start in 3 minutes");
+    battleroyale.chat.broadcast("Minimum number of players reached to start");
+      battleroyale.chat.broadcast("Game is going to start in 3 minutes");
     beingStart = true;
     global.beingStartTimer = setTimeout(function() {
-      gm.events.OnBattleStart();
-    }, gm.utility.minutes(3));
+      battleroyale.events.OnBattleStart();
+    }, battleroyale.utility.minutes(3));
   }
 
-  if(beingStart && jcmp.players.length < gm.config.game.minPlayers)
+  if(beingStart && jcmp.players.length < battleroyale.config.game.minPlayers)
   {
     clearTimeout(beingStartTimer);
-    let needplayers = gm.config.game.minPlayers - jcmp.players.length;
-    gm.utility.broadcastMessage("Need " + needplayers + " players more");
+    let needplayers = battleroyale.config.game.minPlayers - jcmp.players.length;
+    battleroyale.chat.broadcast("Need " + needplayers + " players more");
   }
 } else { // if Started == true and the game is launch check if player is out of area
 
   for(let player of g_pingame) { // Check if player was in area.
-    if(!gm.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+    if(!battleroyale.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
       // Change player health -2
-      setInterval(function() { gm.events.OnPlayerOutArea(player); }, gm.utility.seconds(15));
+      setInterval(function() { battleroyale.events.OnPlayerOutArea(player); }, battleroyale.utility.seconds(15));
     }
 
     //timeLeft.seconds -= 1;
@@ -44,18 +44,18 @@ if(!Started)
       timeLeft.seconds -= 1;
     }
 
-    gm.utility.print(timeLeft.minutes + ":" + timeLeft.seconds);
+    battleroyale.utility.print(timeLeft.minutes + ":" + timeLeft.seconds);
 }
 
 
 // Check if the players on the lobby was in lobby area or not.
 
 for(let player of jcmp.players) {
-  if(!gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, gm.config.game.lobbyradius) && !player.ingame) {
+  if(!battleroyale.utility.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius) && !player.ingame) {
 
     console.log(player.name + " was not in lobby area");
     console.log("changing player position");
-    player.position = gm.config.game.lobbypos;
+    player.position = battleroyale.config.game.lobbypos;
     console.log(player.name + " X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
   }
 }
@@ -67,24 +67,24 @@ events.Add("OnBattleStart", function()
 {
 
 
-  timeLeft.minutes = gm.utility.msToMinutes(gm.config.game.roundTime);
-gm.utility.print("Battle started!!");
+  timeLeft.minutes = battleroyale.utility.msToMinutes(battleroyale.config.game.roundTime);
+battleroyale.utility.print("Battle started!!");
 
   Started = true;
   beingStart = false;
 
   global.EndTimer = setTimeout(function() {
-    gm.events.OnBattleEnd();
-  }, gm.config.game.roundTime);
+    battleroyale.events.OnBattleEnd();
+  }, battleroyale.config.game.roundTime);
 
   global.AreaTimer = setInterval(function() {
-    gm.events.OnBattleAreaChange();
-  }, gm.utility.minutes(3));
+    battleroyale.events.OnBattleAreaChange();
+  }, battleroyale.utility.minutes(3));
 
-  let maxSpawn = gm.spawns.spawn.length - 1;
-  let rnd = gm.utility.RandomInt(0, maxSpawn);
+  let maxSpawn = battleroyale.spawns.spawn.length - 1;
+  let rnd = battleroyale.utility.RandomInt(0, maxSpawn);
   //console.log("RANDOM INDEX: " + rnd);
-  let data = gm.spawns.spawn[rnd];
+  let data = battleroyale.spawns.spawn[rnd];
   let spawnPos = new Vector3f(data.x, data.y, data.z);
 
   for(let player of jcmp.players) {
@@ -93,9 +93,9 @@ gm.utility.print("Battle started!!");
     player.position = spawnPos;
   }
 
-   global.battleArea = { position: spawnPos, radius: gm.config.game.startAreaRadius }; // position here is useless
+   global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius }; // position here is useless
 
-  //gm.utility.LoadVehicles();
+  //battleroyale.utility.LoadVehicles();
 
 });
 
@@ -111,35 +111,35 @@ events.Add("OnBattleEnd", function()
       }
     }*/
 
-    gm.utility.broadcastMessage(g_pingame.length + " people survived to the battle");
-    gm.utility.broadcastMessage("Survivors: ");
+    battleroyale.chat.broadcast(g_pingame.length + " people survived to the battle");
+    battleroyale.chat.broadcast("Survivors: ");
 
     /*for(let player of g_players) {
       if(player.ingame) {
         player.ingame = false
-        player.position = gm.config.game.lobbypos;
-        gm.utility.broadcastMessage(" - " + player.name);
+        player.position = battleroyale.config.game.lobbypos;
+        battleroyale.chat.broadcast(" - " + player.name);
       }
     }*/
 
     for(let player of g_pingame) {
       player.ingame = false;
-      player.position = gm.config.game.lobbypos;
-      gm.utility.broadcastMessage(" - " + player.name);
+      player.position = battleroyale.config.game.lobbypos;
+      battleroyale.chat.broadcast(" - " + player.name);
     }
 
   } else { // if round gots a winner
-    gm.utility.broadcastMessage(player.name + "was the winner of battle royale!");
+    battleroyale.chat.broadcast(player.name + "was the winner of battle royale!");
     player.ingame = false;
-    player.position = gm.config.game.lobbypos;
-  
+    player.position = battleroyale.config.game.lobbypos;
+
 
   }
 
   clearInterval(AreaTimer);
   Started = false;
   g_pingame = [];
-  gm.utility.broadcastMessage("A new battle is going to start soon!");
+  battleroyale.chat.broadcast("A new battle is going to start soon!");
 
 });
 
@@ -147,9 +147,9 @@ events.Add("OnBattleAreaChange", function()
 {
 
 
-gm.utility.broadcastMessage("Battle area changed, look to the map");
+battleroyale.chat.broadcast("Battle area changed, look to the map");
 
-let rnd = gm.utility.RandomInt(0, g_pingame.length - 1);
+let rnd = battleroyale.utility.RandomInt(0, g_pingame.length - 1);
 let areaPos = g_pingame[rnd].position;
 let rad = battleArea.radius / 2;
 battleArea = { position: areaPos, radius: rad }
@@ -159,9 +159,9 @@ battleArea = { position: areaPos, radius: rad }
 
 events.Add("OnPlayerOutArea", function(player)
 {
-  player.SendChatMessage("You not are in the area!! ");
+  battleroyale.chat.send(player,"You not are in the area!! ");
   player.health -= 100;
-  gm.utility.broadcastMessage(player.name + "Die because he is out of the area!");
+  battleroyale.chat.broadcast(player.name + "Die because he is out of the area!");
 // Die because he is out of the area
 
 });

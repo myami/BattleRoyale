@@ -2,7 +2,7 @@
 
 
 
-const utility = require('../utility');
+const utility = require('../gm/utility');
 
 
 module.exports = function({ Command, manager }) {
@@ -14,10 +14,10 @@ manager.category('battleroyale', 'BattleRoyale related commands')
     .timeout(180000)
     .description('Check if you are in the circle')
     .handler((player) => {
-    if(gm.utility.IsPointInCircle(player.position, gm.config.game.lobbypos, 100.0)) {
-    player.SendChatMessage("You are in the circle");
+    if(battleroyale.utility.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, 100.0)) {
+    battleroyale.chat.send(player,"You are in the circle");
     } else {
-    player.SendChatMessage("You're not in the circle");
+    battleroyale.chat.send(player,"You're not in the circle");
     }
     }))
 
@@ -25,7 +25,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
       .timeout(180000)
       .description('Restart the server')
       .handler((player) => {
-      player.SendChatMessage("Server restarting...");
+      battleroyale.chat.send(player,"Server restarting...");
       console.log("Server restarting...");
       server.Restarts();
       }))
@@ -34,44 +34,44 @@ manager.category('battleroyale', 'BattleRoyale related commands')
        .timeout(180000)
        .description('Check the time of the round')
        .handler((player) => {
-       player.SendChatMessage(gm.utility.PutCero(timeLeft.minutes) + ":" + gm.utility.PutCero(timeLeft.seconds));
+       battleroyale.chat.send(player,battleroyale.utility.PutCero(timeLeft.minutes) + ":" + battleroyale.utility.PutCero(timeLeft.seconds));
         }))
 
             .add(new Command('inbattlearea')
             .timeout(180000)
             .description('Check if you are in the area ')
             .handler((player) => {
-            if(gm.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
-        	  player.SendChatMessage("You are in range of battle area circle");
+            if(battleroyale.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+        	  battleroyale.chat.send(player,"You are in range of battle area circle");
             } else {
-        	  player.SendChatMessage("You aren't in range of battle area circle");
+        	  battleroyale.chat.send(player,"You aren't in range of battle area circle");
         	  }
            }))
              .add(new Command('survival')
              .timeout(180000)
              .description('Check the time of the round')
              .handler((player) => {
-             player.SendChatMessage(gm.utility.PutCero(timeLeft.minutes) + ":" + gm.utility.PutCero(timeLeft.seconds));
+             battleroyale.chat.send(player,battleroyale.utility.PutCero(timeLeft.minutes) + ":" + battleroyale.utility.PutCero(timeLeft.seconds));
              }))
                 .add(new Command('reducearea')
                 .timeout(180000)
                 .description('Reduced area of battle')
                 .handler((player) => {
                  clearInterval(global.AreaTimer);
-                 gm.events.OnBattleAreaChange();
+                 battleroyale.events.OnBattleAreaChange();
                  // Start the interval again
                  global.AreaTimer = setInterval(function() {
-                 gm.events.OnBattleAreaChange();
-                 }, gm.utility.minutes(3));
+                 battleroyale.events.OnBattleAreaChange();
+                 }, battleroyale.utility.minutes(3));
                  }))
 
        .add(new Command('seespawns')
        .timeout(180000)
        .description('See the coordinate of the spawns')
        .handler((player) => {
-       for(let i = 0; i < gm.spawns.spawn.length; i++) {
-       let data = gm.spawns.spawn[i];
-       player.SendChatMessage(i + ": " + " X: " + data.x + " Y: " + data.y + " Z: " + data.z);
+       for(let i = 0; i < battleroyale.spawns.spawn.length; i++) {
+       let data = battleroyale.spawns.spawn[i];
+       battleroyale.chat.send(player,i + ": " + " X: " + data.x + " Y: " + data.y + " Z: " + data.z);
        }
        }))
          .add(new Command('endBattle')
@@ -79,7 +79,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
          .description('End the battleroyale')
          .handler((player) => {
          clearTimeout(global.EndTimer);
-   	     gm.events.OnBattleEnd();
+   	     battleroyale.events.OnBattleEnd();
          }))
 
      .add(new Command('startBattle')
@@ -88,7 +88,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
      .handler((player) => {
      console.log("battle started!");
      clearTimeout(beingStartTimer);
-     gm.events.OnBattleStart();
+     battleroyale.events.OnBattleStart();
      }))
 
   .add(new Command('gplayers')
@@ -96,6 +96,14 @@ manager.category('battleroyale', 'BattleRoyale related commands')
   .description('Player in game')
   .handler((player) => {
    console.log("Players: " + g_players.length);
+   }))
+
+   .add(new Command('positions')
+   .timeout(1)
+   .description('Give the XYZ position of hte player')
+   .handler((player) => {
+        battleroyale.chat.send(player," X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
+
    }))
 
 //normal commands
@@ -106,23 +114,23 @@ manager.category('battleroyale', 'BattleRoyale related commands')
    .handler((player, args) => {
 
       if(PlayerInfo[player.name].adminlvl < 3) {
-        return player.SendChatMessage("Vous n'avez pas accès a cette commande.");
+        return battleroyale.chat.send(player,"Vous n'avez pas accès a cette commande.");
       }
 
       if (args.length === 0) {
-        return player.SendChatMessage("Utilisation: /promoteadmin [id or name] [adminlvl]", red);
+        return battleroyale.chat.send(player,"Utilisation: /promoteadmin [id or name] [adminlvl]", red);
       }
 
       let adminlvl = parseInt(args[1]);
 
       if(isNaN(adminlvl)) {
-        player.SendChatMessage("Admin Level must be a number")
+        battleroyale.chat.send(player,"Admin Level must be a number")
       }
 
-      let targets = gm.utility.getPlayer(args[0], false);
+      let targets = battleroyale.utility.getPlayer(args[0], false);
 
       if (targets.length === 0) {
-        return player.SendChatMessage("Cible inconnue.", red);
+        return battleroyale.chat.send(player,"Cible inconnue.", red);
       }
       else if (targets.length > 1) {
         let msg = "Plusieurs cibles trouvées: ";
@@ -130,21 +138,21 @@ manager.category('battleroyale', 'BattleRoyale related commands')
           msg += p.name + ", ";
         }
         msg = msg.slice(0, msg.length - 2);
-        return player.SendChatMessage(msg, red);
+        return battleroyale.chat.send(player,msg, red);
       }
 
       if(!pLogged[targets[0].name]) {
-        return player.SendChatMessage("This user was not logged");
+        return battleroyale.chat.send(player,"This user was not logged");
       }
 
 
       PlayerInfo[targets[0].name].adminlvl = adminlvl;
 
-      if(gm.events.onPlayerUpdate(targets[0])) {
-        player.SendChatMessage("[ADMIN] Vous avez promu " + targets[0].name + " admin: " + adminlvl);
+      if(battleroyale.events.onPlayerUpdate(targets[0])) {
+        battleroyale.chat.send(player,"[ADMIN] Vous avez promu " + targets[0].name + " admin: " + adminlvl);
         targets[0].SendChatMessage("[ADMIN] Vou savez été promu admin: " + adminlvl + " par " + player.name);
       } else {
-        player.SendChatMessage("[ERROR] An error ocurred when trying to upload player info of " + targets[0].name)
+        battleroyale.chat.send(player,"[ERROR] An error ocurred when trying to upload player info of " + targets[0].name)
       }
     }))
 
@@ -156,10 +164,10 @@ manager.category('battleroyale', 'BattleRoyale related commands')
       let password = args.join(" ");
 
     if(pLogged[player.name]) {
-      return player.SendChatMessage("Vous êtes déjà enregistré.");
+      return battleroyale.chat.send(player,"Vous êtes déjà enregistré.");
     }
 
-    let connection = gm.utility.dbConnect();
+    let connection = battleroyale.utility.dbConnect();
 
     connection.connect();
 
@@ -169,7 +177,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
       if(numRows >= 1) {
         connection.end();
-        return player.SendChatMessage("Vous etes déjà enregistré, connectez vous avec: /login [Motdepasse]");
+        return battleroyale.chat.send(player,"Vous etes déjà enregistré, connectez vous avec: /login [Motdepasse]");
       }
     });
 
@@ -188,13 +196,13 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
           if(!err) {
               console.log("user "+ player.name + " registered sucesfull \n\n");
-              player.SendChatMessage("Vous avez été inscrit avec succès");
+              battleroyale.chat.send(player,"Vous avez été inscrit avec succès");
               connection.query("SELECT id FROM users WHERE username = '" + player.name + "'", function(err2, results)
               {
                     PlayerInfo[player.name].id = results[0].id;
 
 
-                    gm.events.onPlayerUpdate(player);
+                    battleroyale.events.onPlayerUpdate(player);
                     pLogged[player.name]  = true;
 
                   });
@@ -202,14 +210,14 @@ manager.category('battleroyale', 'BattleRoyale related commands')
           } else {
               console.log("Ha ocurrido un error al registrar al jugador \n\n");
               console.log("Error: " + err)
-              player.SendChatMessage("Une erreur est survenue pendant votre inscription, Essayez a nouveaux" + err);
+              battleroyale.chat.send(player,"Une erreur est survenue pendant votre inscription, Essayez a nouveaux" + err);
           }
 
         });
 
 
       } else {
-        player.SendChatMessage("Les mot de passes ne correspondent pas, Essayez à nouveaux");
+        battleroyale.chat.send(player,"Les mot de passes ne correspondent pas, Essayez à nouveaux");
         ConfirmPwd[player.name] = "";
         ConfirmReg[player.name] = false;
       }
@@ -217,7 +225,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
     } else {
       ConfirmPwd[player.name] = password;
       ConfirmReg[player.name] = true;
-      player.SendChatMessage("Pour confirmer votre inscription tapez à nouveaux la commande /register [motdepasse]");
+      battleroyale.chat.send(player,"Pour confirmer votre inscription tapez à nouveaux la commande /register [motdepasse]");
     }
      }))
 
@@ -229,12 +237,12 @@ manager.category('battleroyale', 'BattleRoyale related commands')
      .description('login youre account')
      .handler((player, args) => {
        if(!Registered[player.name]) {
-           return player.SendChatMessage("Vous n'etes pas inscrit, Pour vous inscrire tapez la commande: /register [motdepasse]");
+           return battleroyale.chat.send(player,"Vous n'etes pas inscrit, Pour vous inscrire tapez la commande: /register [motdepasse]");
          } else {
 
            let password = args.join(" ");
 
-           let connection = gm.utility.dbConnect();
+           let connection = battleroyale.utility.dbConnect();
            connection.connect();
            var sha1 = require('sha1');
            password = connection.escape(password);
@@ -254,12 +262,12 @@ manager.category('battleroyale', 'BattleRoyale related commands')
                }
                let stringLicenses = JSON.stringify(results[0]);
                console.log(stringLicenses);
-               gm.events.onPlayerLogin(player, results[0]);
+               battleroyale.events.onPlayerLogin(player, results[0]);
 
-               player.SendChatMessage("Connection réussie");
+               battleroyale.chat.send(player,"Connection réussie");
 
              } else {
-               player.SendChatMessage("Mot de passe incorrect, Réessayez.")
+               battleroyale.chat.send(player,"Mot de passe incorrect, Réessayez.")
              }
 
            });
@@ -274,12 +282,12 @@ manager.category('battleroyale', 'BattleRoyale related commands')
          .description('update data')
          .handler((player,args) => {
            if (args.length < 1) {
-               return player.SendChatMessage("Utilisation: /update");
+               return battleroyale.chat.send(player,"Utilisation: /update");
              }
              if(PlayerInfo[player.name].adminlvl < 3) {
-               return player.SendChatMessage("Vous n'avez pas accès a cette commande.");
+               return battleroyale.chat.send(player,"Vous n'avez pas accès a cette commande.");
              }
-                 gm.events.updateAllPlayers();          }))
+                 battleroyale.events.updateAllPlayers();          }))
 
 
 

@@ -1,31 +1,17 @@
 'use strict';
 
-const utility = require('../utility');
-
-const vehicles = require('../hashes/vehicles.json');
-
-module.exports = function({ Command, manager }) {
+module.exports = ({ Command, manager }) => {
   manager.category('vehicle', 'vehicle commands')
-    .add(new Command(['vehicle', 'v'])
-      .parameter('name', 'string', 'vehicle name (or parts of it)', {
-        isTextParameter: true,
-        hints: vehicles.map(v => v.name),
-        })
-      .description('spawns a vehicle')
-      .handler((player, name) => {
-        const v = vehicles.filter(vehicle => vehicle.name.match(new RegExp(name, 'ig')));
-        if (v.length === 0) {
-          gm.chat.send(player, 'found no matching vehicles!', gm.config.color.red);
+    .add(new Command(['color', 'colour'])
+      .parameter('colour', 'number', 'vehicle colour')
+      .description('changes your vehicle colour')
+      .handler((player, colour) => {
+        if (typeof player.vehicle === 'undefined') {
+          battleroyale.chat.send(player, 'You must be in a vehicle to use this command.', battleroyale.config.colours.command_fail);
           return;
-        } else if (v.length > 1) {
-          gm.chat.send(player, 'found too many vehicles. using the first available.', gm.config.color.purple);
         }
 
-        if (typeof player.spawnedVehicle !== 'undefined') {
-          player.spawnedVehicle.Destroy();
-        }
-
-        gm.chat.send(player, `have fun with your ${v[0].name}!`, gm.config.color.green);
-        player.spawnedVehicle = new Vehicle(v[0].hash, player.aimPosition);
-      }));
-}
+        battleroyale.chat.send(player, `Setting your vehicles colour to ${colour}.`, battleroyale.config.colours.command_success);
+        player.vehicle.primaryColor = colour;
+    }))
+};

@@ -1,0 +1,22 @@
+before_script:
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+stages:
+  - deploy
+      
+upload_package:
+  image: registry.gitlab.nanos.io/jc3mp/gitlab-deploy:latest
+  stage: deploy
+  only:
+    - master@jc3mp-packages/freeroam
+  tags:
+    - deploy
+  script:
+    - pack *
+    - upload packages
+  artifacts:
+    paths:
+      - $CI_PROJECT_NAME.tar
