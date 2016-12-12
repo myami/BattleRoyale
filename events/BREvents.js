@@ -5,7 +5,7 @@
 events.Add("Checks", function()
 {
 
-   battleroyale.utility.print("Check!"); //print on the console that the event is run.
+   console.log("Check!"); //print on the console that the event is run.
 
 if(!Started)
 {
@@ -15,22 +15,22 @@ if(!Started)
       battleroyale.chat.broadcast("Game is going to start in 3 minutes");
     beingStart = true;
     global.beingStartTimer = setTimeout(function() {
-      battleroyale.events.OnBattleStart();
-    }, battleroyale.utility.minutes(3));
+      events.Call('OnBattleStart');
+    }, battleroyale.utils.minutes(3));
   }
 
   if(beingStart && jcmp.players.length < battleroyale.config.game.minPlayers)
   {
-    clearTimeout(beingStartTimer);
+    clearTimeout(global.beingStartTimer);
     let needplayers = battleroyale.config.game.minPlayers - jcmp.players.length;
     battleroyale.chat.broadcast("Need " + needplayers + " players more");
   }
 } else { // if Started == true and the game is launch check if player is out of area
 
   for(let player of g_pingame) { // Check if player was in area.
-    if(!battleroyale.utility.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+    if(!battleroyale.utils.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
       // Change player health -2
-      setInterval(function() { battleroyale.events.OnPlayerOutArea(player); }, battleroyale.utility.seconds(15));
+      setInterval(function() {  events.Call('OnPlayerOutArea',player);  }, battleroyale.utils.seconds(15)); //battleroyale.events.OnPlayerOutArea(player);
     }
 
     //timeLeft.seconds -= 1;
@@ -44,14 +44,14 @@ if(!Started)
       timeLeft.seconds -= 1;
     }
 
-    battleroyale.utility.print(timeLeft.minutes + ":" + timeLeft.seconds);
+    console.log(timeLeft.minutes + ":" + timeLeft.seconds);
 }
 
 
 // Check if the players on the lobby was in lobby area or not.
 
 for(let player of jcmp.players) {
-  if(!battleroyale.utility.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius) && !player.ingame) {
+  if(!battleroyale.utils.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius) && !player.ingame) {
 
     console.log(player.name + " was not in lobby area");
     console.log("changing player position");
@@ -67,22 +67,22 @@ events.Add("OnBattleStart", function()
 {
 
 
-  timeLeft.minutes = battleroyale.utility.msToMinutes(battleroyale.config.game.roundTime);
-battleroyale.utility.print("Battle started!!");
+  timeLeft.minutes = battleroyale.utils.msToMinutes(battleroyale.config.game.roundTime);
+console.log("Battle started!!");
 
   Started = true;
   beingStart = false;
 
-  global.EndTimer = setTimeout(function() {
-    battleroyale.events.OnBattleEnd();
+  global.EndTimer = setTimeout(function() {      // end of the party
+     events.Call('OnBattleEnd');
   }, battleroyale.config.game.roundTime);
 
-  global.AreaTimer = setInterval(function() {
-    battleroyale.events.OnBattleAreaChange();
-  }, battleroyale.utility.minutes(3));
+  global.AreaTimer = setInterval(function() {  // change the area
+     events.Call('OnBattleAreaChange');
+  }, battleroyale.utils.minutes(3));
 
   let maxSpawn = battleroyale.spawns.spawn.length - 1;
-  let rnd = battleroyale.utility.RandomInt(0, maxSpawn);
+  let rnd = battleroyale.utils.RandomInt(0, maxSpawn);
   //console.log("RANDOM INDEX: " + rnd);
   let data = battleroyale.spawns.spawn[rnd];
   let spawnPos = new Vector3f(data.x, data.y, data.z);
@@ -95,7 +95,7 @@ battleroyale.utility.print("Battle started!!");
 
    global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius }; // position here is useless
 
-  //battleroyale.utility.LoadVehicles();
+  //battleroyale.utils.LoadVehicles();
 
 });
 
@@ -138,7 +138,7 @@ events.Add("OnBattleEnd", function()
 
   clearInterval(AreaTimer);
   Started = false;
-  g_pingame = [];
+
   battleroyale.chat.broadcast("A new battle is going to start soon!");
 
 });
@@ -149,7 +149,7 @@ events.Add("OnBattleAreaChange", function()
 
 battleroyale.chat.broadcast("Battle area changed, look to the map");
 
-let rnd = battleroyale.utility.RandomInt(0, g_pingame.length - 1);
+let rnd = battleroyale.utils.RandomInt(0, g_pingame.length - 1);
 let areaPos = g_pingame[rnd].position;
 let rad = battleArea.radius / 2;
 battleArea = { position: areaPos, radius: rad }

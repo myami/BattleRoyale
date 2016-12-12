@@ -182,13 +182,7 @@ module.exports = class Utility {
   }
 
 
-    static print (message){
-      let fmsg = Utility.timestamp() + " " + message;
-      console.log(fmsg);
-      /*let f = gm.fs("./logs/general.txt");
-      f.write(fmsg+ "\n");
-      f.end();*/
-    }
+
     static timestamp (){
       let d = new Date();
     	let year = d.getFullYear();
@@ -206,7 +200,7 @@ module.exports = class Utility {
       return seconds * 1000;
     }
     static minutes (minutes){
-    return utility.seconds(60) * minutes
+    return Utility.seconds(60) * minutes
     }
 
     static isInArray (value, array){
@@ -237,7 +231,7 @@ module.exports = class Utility {
     }
 
     static debugMsg (message) {
-    	if(gm.config.debug) console.log("[DEBUG] " + message);
+    	if(battlroyale.config.debug) console.log("[DEBUG] " + message);
     }
     static msToMinutes (ms) {
     	return (ms / 1000) / 60;
@@ -253,11 +247,13 @@ module.exports = class Utility {
     static RandomFloat (min, max) {
     	return (Math.random() * (min - max) + max);
     }
-
+    static RandomInt (min, max) {
+    	return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
 
     static dbConnect () {
-        gm.utility.print("Server wants to connect");
+        console.log("Server wants to connect");
       	return gm.mysql.createConnection({
               host     : gm.config.mysql.host,
               user     : gm.config.mysql.user,
@@ -266,41 +262,8 @@ module.exports = class Utility {
           });
       }
 
-      static ban (player) {
-
-      	let connection = Utility.dbConnect();
-
-      	connection.connect();
-
-      	let SQLQuery = "UPDATE users SET banned = 1 WHERE id = " + PlayerInfo[player.name].id;
-      	printf(player.name + "a été bannis");
-      	connection.query(SQLQuery);
-
-      	connection.end();
-
-      }
-
-      static unban (player) {
-
-      	let connection = Utility.dbConnect();
 
 
-      	connection.connect();
-
-      	let SQLQuery = "UPDATE users SET banned = 0 WHERE id = " + PlayerInfo[player.name].id;
-      	printf(player.name + "a été débannis");
-      	connection.query(SQLQuery);
-
-      	connection.end();
-
-      }
-      static adminMessage (message, opt_color) {
-          for (let player of jc3mp.players) {
-          if(PlayerInfo[player.name].adminlvl >= 1) {
-            player.SendChatMessage(message, opt_color);
-        }
-        }
-        }
 
 
 

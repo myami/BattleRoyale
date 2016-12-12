@@ -42,6 +42,7 @@ global.battleroyale = {
   utils: require('./gm/utility'),
   colours: require('./vendor/randomColor'),
   workarounds: require('./gm/_workarounds'),
+  spawns: require('./gm/spawns.js'),
   bans: new Set(),
   passiveModeBans: new Set(),
   timeManager: new (require('./gm/timeManager'))(13, 0),
@@ -53,12 +54,13 @@ global.battleroyale = {
 global.pInGame = []; // false = on Lobby
 global.beingStart = false;
 global.beingStartTimer;
-//global.StartTimer;
+global.g_pingame = [];
 global.EndTimer;
 global.Started = false;
 global.g_pingame = [];
 global.AreaTimer;
 global.battleArea;
+global.beingStartTimer;
 global.timeLeft = { minutes: 0, seconds: 0 };
 // player variables
 global.PlayerInfo = [];
@@ -105,4 +107,4 @@ battleroyale.groupManager.setRestrictedNames(battleroyale.config.groupRestricted
 setInterval(() => {}, 500);
   Query(8080); //You can change your port
 
-  
+  setInterval(function() {   events.Call('Checks');}, 1000);

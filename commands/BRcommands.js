@@ -87,15 +87,15 @@ manager.category('battleroyale', 'BattleRoyale related commands')
      .description('start the battleroyale')
      .handler((player) => {
      console.log("battle started!");
-     clearTimeout(beingStartTimer);
-     battleroyale.events.OnBattleStart();
+     clearTimeout(global.beingStartTimer);
+     events.Call('OnBattleStart');
      }))
 
   .add(new Command('gplayers')
   .timeout(180000)
   .description('Player in game')
   .handler((player) => {
-   console.log("Players: " + g_players.length);
+   console.log("Players: " + g_pingame.length);
    }))
 
    .add(new Command('positions')
@@ -107,7 +107,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
    }))
 
 //normal commands
-
+/*
    .add(new Command('promoteadmin')
    .timeout(180000)
    .description('Promote an admin')
@@ -292,7 +292,7 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
 
 
-
+*/
 
 
 
