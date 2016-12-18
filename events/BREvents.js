@@ -5,62 +5,60 @@
 events.Add("Checks", function()
 {
 
-   console.log("Check!"); //print on the console that the event is run.
+  console.log("Check!"); //print on the console that the event is run.
 
-if(!Started)
-{
-  if(!beingStart && jcmp.players.length >= battleroyale.config.game.minPlayers)
+  if(!Started)
   {
-    battleroyale.chat.broadcast("Minimum number of players reached to start");
-      battleroyale.chat.broadcast("Game is going to start in 3 minutes");
-    beingStart = true;
-    global.beingStartTimer = setTimeout(function() {
-      events.Call('OnBattleStart');
-    }, battleroyale.utils.minutes(3));
-  }
-
-  if(beingStart && jcmp.players.length < battleroyale.config.game.minPlayers)
-  {
-    clearTimeout(global.beingStartTimer);
-    let needplayers = battleroyale.config.game.minPlayers - jcmp.players.length;
-    battleroyale.chat.broadcast("Need " + needplayers + " players more");
-  }
-} else { // if Started == true and the game is launch check if player is out of area
-
-  for(let player of g_pingame) { // Check if player was in area.
-    if(!battleroyale.utils.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
-      // Change player health -2
-      setInterval(function() {  events.Call('OnPlayerOutArea',player);  }, battleroyale.utils.seconds(15)); //battleroyale.events.OnPlayerOutArea(player);
+    if(!beingStart && jcmp.players.length >= battleroyale.config.game.minPlayers)
+    {
+      battleroyale.chat.broadcast("Minimum number of players reached to start");
+        battleroyale.chat.broadcast("Game is going to start in 3 minutes");
+      beingStart = true;
+      global.beingStartTimer = setTimeout(function() {
+        events.Call('OnBattleStart');
+      }, battleroyale.utils.minutes(3));
     }
 
-    //timeLeft.seconds -= 1;
+    if(beingStart && jcmp.players.length < battleroyale.config.game.minPlayers)
+    {
+      clearTimeout(global.beingStartTimer);
+      let needplayers = battleroyale.config.game.minPlayers - jcmp.players.length;
+      battleroyale.chat.broadcast("Need " + needplayers + " players more");
+    }
+  } else { // if Started == true and the game is launch check if player is out of area
 
-  }
+    for(let player of g_pingame) { // Check if player was in area.
+      if(!battleroyale.utils.IsPointInCircle(player.position, battleArea.position, battleArea.radius)) {
+        // Change player health -2
+        setInterval(function() {  events.Call('OnPlayerOutArea',player);  }, battleroyale.utils.seconds(15)); //battleroyale.events.OnPlayerOutArea(player);
+      }
 
-    if(timeLeft.seconds <= 0) {
-      timeLeft.minutes -= 1;
-      timeLeft.seconds = 59;
-    } else {
-      timeLeft.seconds -= 1;
+      //timeLeft.seconds -= 1;
+
     }
 
-    console.log(timeLeft.minutes + ":" + timeLeft.seconds);
-}
+      if(timeLeft.seconds <= 0) {
+        timeLeft.minutes -= 1;
+        timeLeft.seconds = 59;
+      } else {
+        timeLeft.seconds -= 1;
+      }
 
-
-// Check if the players on the lobby was in lobby area or not.
-
-for(let player of jcmp.players) {
-  if(!battleroyale.utils.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius) && !player.ingame) {
-
-    console.log(player.name + " was not in lobby area");
-    console.log("changing player position");
-    player.position = battleroyale.config.game.lobbypos;
-    console.log(player.name + " X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
+      console.log(timeLeft.minutes + ":" + timeLeft.seconds);
   }
-}
 
 
+  // Check if the players on the lobby was in lobby area or not.
+
+  for(let player of jcmp.players) {
+    if(!battleroyale.utils.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyradius) && !player.ingame) {
+
+      console.log(player.name + " was not in lobby area");
+      console.log("changing player position");
+      player.position = battleroyale.config.game.lobbypos;
+      console.log(player.name + " X: " + player.position.x + " Y: " + player.position.y + " Z: " + player.position.z);
+    }
+  }
 });
 
 events.Add("OnBattleStart", function()
@@ -68,7 +66,7 @@ events.Add("OnBattleStart", function()
 
 
   timeLeft.minutes = battleroyale.utils.msToMinutes(battleroyale.config.game.roundTime);
-console.log("Battle started!!");
+  console.log("Battle started!!");
 
   Started = true;
   beingStart = false;
@@ -91,11 +89,10 @@ console.log("Battle started!!");
     player.ingame = true;
     g_pingame.push(player);
     player.position = spawnPos;
-  player.GiveWeapon(2144721124, 999, true); // give to the player the gun
-
+    player.GiveWeapon(2144721124, 999, true); // give to the player the gun
   }
 
-   global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius };
+  global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius };
 
   //battleroyale.utils.LoadVehicles();
 
@@ -147,22 +144,15 @@ events.Add("OnBattleEnd", function()
 
 events.Add("OnBattleAreaChange", function()
 {
+  battleroyale.chat.broadcast("Battle area changed, look to the map");
 
+  let rnd = battleroyale.utils.RandomInt(0, g_pingame.length - 1);
+  let areaPos = g_pingame[rnd].position;
+  let rad = battleArea.radius / 2;
+  battleArea = { position: areaPos, radius: rad }
 
-battleroyale.chat.broadcast("Battle area changed, look to the map");
-
-let rnd = battleroyale.utils.RandomInt(0, g_pingame.length - 1);
-let areaPos = g_pingame[rnd].position;
-let rad = battleArea.radius / 2;
-battleArea = { position: areaPos, radius: rad }
-events.CallRemote('minimap_removeDrawcall', 'billboards', 'billboards_board1')
-events.CallRemote('minimap_removeDrawcall', 'battleArea_position', 'battleArea_radius')
-events.CallRemote('minimap_removeDrawcall', 'billboards', 'billboards_css')
-events.CallRemote('minimap_addDrawcall', 'billboards', 'billboards_board1', 'drawText', { x: 12, y: 13, text: 'Hello', fontSize: 5})
-events.CallRemote('minimap_addDrawcall', 'battleArea_position', 'battleArea_radius', 'drawCircle', { x: 12, y: 15, color: '#000'})
-events.CallRemote('minimap_addDrawcall', 'billboards', 'billboards_css', 'addCustomCSS', { css: 'body { color: #fff; }'})
-
-
+  events.CallRemote('minimap_removeDrawcall', 'battleroyale', 'battleroyale_battlearea')
+  events.CallRemote('minimap_addDrawcall', 'battleroyale', 'battleArea_battlearea', 'drawCircle', { x: 12, y: 15, radius: rad})
 });
 
 events.Add("OnPlayerOutArea", function(player)
