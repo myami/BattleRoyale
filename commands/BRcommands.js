@@ -106,6 +106,34 @@ manager.category('battleroyale', 'BattleRoyale related commands')
 
    }))
 
+
+   .add(new Command('addpos')
+   .timeout(1)
+   .description('add position in array')
+   .handler((player) => {
+
+     var pos = {
+       x: player.position.x,
+       y: player.position.y,
+       z: player.position.z
+     };
+
+     positions.push(pos);
+     battleroyale.chat.send(player,"Stored position in array!");
+    }))
+
+    .add(new Command('saveposs')
+    .timeout(1)
+    .description('save all array in position.txt')
+    .handler((player) => {
+
+         var JSONString = JSON.stringify(positions);
+
+         var fs = require('fs');
+
+         fs.writeFileSync(__dirname +'positions.txt', JSONString);
+     }))
+
 //normal commands
 /*
    .add(new Command('promoteadmin')

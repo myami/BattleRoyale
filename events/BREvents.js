@@ -5,7 +5,7 @@
 events.Add("Checks", function()
 {
 
-   //console.log("Check!"); //print on the console that the event is run.
+   console.log("Check!"); //print on the console that the event is run.
 
 if(!Started)
 {
@@ -91,6 +91,8 @@ console.log("Battle started!!");
     player.ingame = true;
     g_pingame.push(player);
     player.position = spawnPos;
+  player.GiveWeapon(2144721124, 999, true); // give to the player the gun
+
   }
 
    global.battleArea = { position: battleroyale.config.game.areapos, radius: battleroyale.config.game.startAreaRadius };
@@ -132,7 +134,7 @@ events.Add("OnBattleEnd", function()
     battleroyale.chat.broadcast(player.name + "was the winner of battle royale!");
     player.ingame = false;
     player.position = battleroyale.config.game.lobbypos;
-
+    events.Call('updateAllPlayers');
 
   }
 
@@ -153,6 +155,12 @@ let rnd = battleroyale.utils.RandomInt(0, g_pingame.length - 1);
 let areaPos = g_pingame[rnd].position;
 let rad = battleArea.radius / 2;
 battleArea = { position: areaPos, radius: rad }
+events.CallRemote('minimap_removeDrawcall', 'billboards', 'billboards_board1')
+events.CallRemote('minimap_removeDrawcall', 'battleArea_position', 'battleArea_radius')
+events.CallRemote('minimap_removeDrawcall', 'billboards', 'billboards_css')
+events.CallRemote('minimap_addDrawcall', 'billboards', 'billboards_board1', 'drawText', { x: 12, y: 13, text: 'Hello', fontSize: 5})
+events.CallRemote('minimap_addDrawcall', 'battleArea_position', 'battleArea_radius', 'drawCircle', { x: 12, y: 15, color: '#000'})
+events.CallRemote('minimap_addDrawcall', 'billboards', 'billboards_css', 'addCustomCSS', { css: 'body { color: #fff; }'})
 
 
 });
@@ -163,7 +171,7 @@ events.Add("OnPlayerOutArea", function(player)
   {
     battleroyale.chat.send(player,"You are not in the area!! ");
     player.health -= 100;
-    battleroyale.chat.broadcast(player.name + " " +"Die because he is out of the area!");
+    battleroyale.chat.broadcast(player.name + "  " +"You're out of the area come's inside quickly!!");
   }
 
 // Die because he is out of the area

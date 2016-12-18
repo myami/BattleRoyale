@@ -61,7 +61,7 @@ function randomSpawn(baseVec, radius) {
 
 events.Add("PlayerReady", (player) => {
   player.escapedNametagName = player.nametag.name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  player.respawnPosition = randomSpawn(util.randomArray(spawnLocations), 900); // spawn area
+  player.respawnPosition = new Vector3f(-13536.0, 1040, 14599) // spawn area
   player.world.weather = battleroyale.config.world.weather;
   player.world.timeScale = 1.0;
   battleroyale.timeManager.updatePlayer(player);

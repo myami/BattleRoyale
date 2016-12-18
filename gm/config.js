@@ -20,7 +20,7 @@ module.exports = {
   mysql: {
 host     : 'web.sql.servergamers.net',
 user     : 'sql_web_SRKyBQnF',
-password : 'iHqlXY2I',
+password : 'admins',
 database : 'sql_web_SRKyBQnF'
 },
 game: {
@@ -29,8 +29,8 @@ minPlayers: 1,
 roundTime: (1 * 1000) * 60,
 lobbypos: new Vector3f(-13536.0, 1026.0, 14599),
 lobbyradius: 1000,
-areapos: new Vector3f(-1780,1240,-6483),
-startAreaRadius: 4000.0,
+areapos: new Vector3f(-2923,1620,-6280),
+startAreaRadius: 11000,
 debug: true
 },
 

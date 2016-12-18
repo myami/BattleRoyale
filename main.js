@@ -62,6 +62,8 @@ global.AreaTimer;
 global.battleArea;
 global.beingStartTimer;
 global.timeLeft = { minutes: 0, seconds: 0 };
+
+global.positions = [];
 // player variables
 global.PlayerInfo = [];
 //Other player variables
