@@ -9,7 +9,7 @@ events.Add('chat_message', (player, message) => {
 });
 
 events.AddRemoteCallable('chat_ready', player => {
-  battleroyale.chat.send(player, 'Welcome to the Battleroyale server hosted by servergamers.net', battleroyale.config.colours.green);
+  battleroyale.chat.send(player, 'Welcome to the Battleroyale server created by Myami and daranix', battleroyale.config.colours.green);
   battleroyale.chat.send(player, 'Spawning might take a while. Please wait and enjoy the view.', battleroyale.config.colours.purple);
 
   if (battleroyale.bans.has(player.client.steamId)) {

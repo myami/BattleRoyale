@@ -29,8 +29,8 @@ minPlayers: 1,
 roundTime: (1 * 1000) * 60,
 lobbypos: new Vector3f(-13536.0, 1026.0, 14599),
 lobbyradius: 1000,
-areapos: new Vector3f(-2923,1620,-6280),
-startAreaRadius: 11000,
+areapos: new Vector3f(-4126,1207,-7660),
+startAreaRadius: 2000, // metre ?
 debug: true
 },
 
