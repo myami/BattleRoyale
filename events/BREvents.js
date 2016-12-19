@@ -5,7 +5,7 @@
 events.Add("Checks", function()
 {
 
-  //console.log("Check!"); //print on the console that the event is run.
+  console.log("Check!"); //print on the console that the event is run.
 
   if(!Started)
   {
