@@ -1,8 +1,0 @@
-{
-  "name": "JC3BattleRoyale",
-  "author": "Myami",
-  "jcmp_dependencies": [
-    "chat",
-    "command-manager"
-  ]
-}
