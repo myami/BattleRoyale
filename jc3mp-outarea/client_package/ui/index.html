@@ -3,30 +3,26 @@
     <head>
         <title>OutAREA</title>
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" />
-
+        <style>
+            #area{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background-color:rgba(85, 89, 101, 0.8);border-radius:8px;-webkit-user-select:none;font-size:64px;color:#55c98c;padding:32px;text-align:center;transition:opacity .5s}
+        </style>
     </head>
     <body>
-	<style>
-	#area{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background-color:rgba(85, 89, 101, 0.8);border-radius:8px;-webkit-user-select:none;font-size:64px;color:#55c98c;padding:32px;text-align:center;transition:opacity .5s}
-	</style>
         <div id="area">You are out of the area</div>
 
         <script type="text/javascript" src="jquery.js"></script>
-
-
         <script>
-        $('.area').show();
-            var screen_visible = true;
-
-              // need to change to be appear when player is out of the area with the event call screen_visible on the OnPlayerOutArea
-                  if(screen_visible) {
-                      screen_visible = false;
-                      $('.area').hide();
-                  } else {
-                      screen_visible = true;
-                      $('.area').show();
-                  }
-
+        jcmp.AddEvent('outarea_ready', function() {
+          console.log("Hello")
+        });
+        //jcmp.CallEvent('outarea_ready', 'hello');
+            jcmp.AddEvent('outarea_toggle', (screen_visible) => {
+                if(screen_visible) {
+                    $('.area').show();
+                } else {
+                    $('.area').hide();
+                }
+            });
         </script>
     </body>
 </html>
