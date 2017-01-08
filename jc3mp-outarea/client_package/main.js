@@ -21,5 +21,5 @@ jcmp.events.AddRemoteCallable('outarea_ready', () => {
 
     jcmp.ui.CallEvent('outarea_ready');
 });
-=======
+
 
