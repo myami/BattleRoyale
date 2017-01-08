@@ -13,7 +13,6 @@ ui.autoResize = true;
 jcmp.events.AddRemoteCallable('outarea_toggle', (toggle) => {
   jcmp.ui.CallEvent('outarea_toggle', toggle);
 });
-
 /*jcmp.ui.AddEvent('outarea_ready', msg => {
   jcmp.events.CallRemote('outarea_ready', msg);
 });*/
@@ -21,5 +20,3 @@ jcmp.events.AddRemoteCallable('outarea_ready', () => {
 
     jcmp.ui.CallEvent('outarea_ready');
 });
-
-
