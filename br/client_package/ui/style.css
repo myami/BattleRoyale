@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 50px;
+}
+
+.row {
+    display: -webkit-flex;
+}
+
+.row .column {
+    -webkit-flex: 1;
+}
+
+#helpmessage {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: opacity 200ms linear;
+    -webkit-user-select: none;
+}
+
+#helpmessage.visible {
+    opacity: 1;
+}
+
+#helpmessage h1 {
+    font-size: 18px;
+    line-height: 26px;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#helpmessage h1 span {
+    color: #ffcc00;
+}
+
+#scoreboard {
+    background: rgba(0, 0, 0, 0.65);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    max-width: 1024px;
+    -webkit-border-radius: 6px;
+    -webkit-user-select: none;
+    -webkit-transition: all 100ms linear;
+}
+
+#scoreboard.visible {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translate(-50%, -50%) scale(1);
+}
+
+#scoreboard .row {
+    padding: 10px;
+}
+
+#scoreboard .row .column {
+    position: relative;
+}
+
+#scoreboard .row .column:first-child {
+    -webkit-flex: 0.5;
+}
+
+#scoreboard .row .column:nth-child(2) {
+    -webkit-flex: 4;
+    padding-left: 30px;
+}
+
+#scoreboard .row .column:not(:first-child):not(:nth-child(2)) {
+    text-align: center;
+}
+
+#scoreboard .row .column img {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    -webkit-transform: translateY(-50%);
+}
+
+#scoreboard .header {
+    font-weight: bold;
+    color: #ffffff;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+}
+
+#scoreboard .players {
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: scroll;
+    border: 6px solid transparent;
+    border-top: none;
+    -webkit-border-radius: 6px;
+}
+
+#scoreboard .players .row {
+    background-color: rgba(0, 0, 0, 0.35);
+    color: #ffffff;
+}
+
+#scoreboard .players .row:last-child {
+    border-bottom: none;
+}
+
+#scoreboard .players .row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+#deathui {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    opacity: 0;
+    z-index: 999;
+    -webkit-transition: opacity 200ms linear;
+    -webkit-user-select: none;
+}
+
+#deathui.visible {
+    opacity: 1;
+}
+
+#deathui .container {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    -webkit-transform: translateY(-50%);
+    text-align: center;
+}
+
+#deathui img {
+    max-width: 100px;
+    line-height: 0;
+    margin-bottom: 5px;
+}
+
+#deathui h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+#deathui h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+#deathlist {
+    position: absolute;
+    top: 15%;
+    right: 50px;
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition: opacity 200ms linear;
+    -webkit-user-select: none;
+}
+
+#deathlist.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#deathlist p {
+    font-size: 18px;
+    line-height: 26px;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    text-align: right;
+}
+
+#deathlist p .small {
+    font-size: 14px;
+}
+
+#spawn-protection {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(85, 89, 101, 0.8);
+    border-radius: 8px;
+    -webkit-user-select: none;
+    font-size: 64px;
+    color: #55c98c;
+    padding: 32px;
+    text-align: center;
+    transition: opacity .5s;
+}
+
+#servername {
+    position: fixed;
+    bottom: 4px;
+    right: 4px;
+    font-size: 2.5em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.85;
+    -webkit-user-select: none;
+}
