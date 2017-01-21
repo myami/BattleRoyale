@@ -10,20 +10,16 @@ jcmp.events.Add('chat_message', (player, message) => {
 
     var message = `[${player.battleroyale.colour}] ${player.escapedNametagName}[#FFFFFF]: ${message}`;
     if(battleroyale.utils.isAdmin(player)) {
-      message = '[Admin]' + message;
+      message = '[ADMIN]' + message;
     }
-  /*  if(battleroyale.utils.isNanos()(player)) {
-      message = '[Nanos]' + message;
-    }*/
 
-    console.log(message);
+    //console.log(message);
 
     return message;
 });
 
 jcmp.events.AddRemoteCallable('chat_ready', player => {
     battleroyale.chat.send(player, 'Spawning might take a while. Please wait and enjoy the view.', battleroyale.config.colours.purple);
-    
 
     if (battleroyale.bans.has(player.client.steamId)) {
         battleroyale.chat.send(player, 'You are banned from the server until the next server restart. You will get kicked shortly.', battleroyale.config.colours.red);

@@ -77,9 +77,7 @@ jcmp.events.Add("PlayerReady", (player) => {
     battleroyale.game.players.onlobby.push(player);
     console.log("Player added to lobby list");
     console.log(" * " + battleroyale.game.players.onlobby.length + " on lobby waiting");
-  //  battleroyale.utils.broadcastToLobby("Need player before game start :" + battleroyale.game.players.onlobby.length + "/" + battleroyale.config.game.minPlayers);
-    battleroyale.chat.send(player, "Welcome to the Official BattleRoyale server created by Daranix and Myami , the server is still in alpha.", battleroyale.config.colours.green);
-    battleroyale.chat.send(player, "Need player before game start :" + battleroyale.game.players.onlobby.length + "/" + battleroyale.config.game.minPlayers, battleroyale.config.colours.red);
+
     if (battleroyale.bans.has(player.client.steamId)) {
         battleroyale.chat.send(player, 'You are banned from the server until the next server restart. You will get kicked shortly.', battleroyale.config.colours.red);
             const done = battleroyale.workarounds.watchPlayer(player, setTimeout(() => {

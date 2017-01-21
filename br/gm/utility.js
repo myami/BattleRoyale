@@ -197,9 +197,6 @@ module.exports = class Utility {
     static isAdmin(player) {
         return (battleroyale.config.admins.indexOf(player.client.steamId) !== -1);
     }
-    static isNanos(player) {
-        return (battleroyale.config.nano.indexOf(player.client.steamId) !== -1);
-    }
 
     static randomSpawn(baseVec, radius) {
       const half = radius / 2;
@@ -232,10 +229,24 @@ module.exports = class Utility {
 
     static IsPointInCircle(v1, v2, radius) {
       //console.log(battleroyale.utils.GetDistanceBetweenPointsXY(v1, v2));
-      if(battleroyale.utils.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
-      return false;
+      return battleroyale.utils.GetDistanceBetweenPointsXY(v1, v2) <= radius;
       /*var distsq = (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y);
       return distsq <= radius * radius;*/
+    }
+
+    static IsPointInCircle2D(v1, v2, radius) {
+      return this.GetDistanceBetweenPointsX(v1, v2) <= radius;
+    }
+
+    static IsPointInCylinder(v1, v2, radius, h) { // h is the height of the cylinder radius in altitude
+        if(this.GetDistanceBetweenPointsXY(v1, v2) <= radius && v1.z >= v2.z && v2.z <= (v2.z + h)) {
+          return true;
+        }
+        return false;
+    }
+
+    static GetDistanceBetweenPointsX(v1, v2) {
+      return this.GetDistanceBetweenPoints(new Vector3f(v1.x,0,0), new Vector3f(v2.x,0,0));
     }
 
     static GetDistanceBetweenPoints(v1, v2)
@@ -245,6 +256,7 @@ module.exports = class Utility {
         let dz = v1.z - v2.z;
 
         return Math.sqrt( dx * dx + dy * dy + dz * dz );
+        //return Math.sqrt(Math.pow(Math.abs(v1.x-v2.x),2) + Math.pow(Math.abs(v1.y-v2.y),2)+ Math.pow(Math.abs(v1.z-v2.z),2))
     }
 
     static GetDistanceBetweenPointsXY(v1, v2) {

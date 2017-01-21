@@ -33,7 +33,7 @@ jcmp.events.Add('battleroyale_updates', function() {
         //continue;
       }*/
 
-      if(!battleroyale.utils.IsPointInCircle(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyRadius) && player.battleroyale.ready && !battleroyale.utils.isAdmin(player)) {
+      if(!battleroyale.utils.IsPointInCircle2D(player.position, battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyRadius) && player.battleroyale.ready && !battleroyale.utils.isAdmin(player)) {
         battleroyale.chat.send(player, "You're not in the lobby area, returning you to the lobby area");
         player.respawnPosition = battleroyale.utils.randomSpawn(battleroyale.config.game.lobbypos, battleroyale.config.game.lobbyRadius / 2);
         player.Respawn();
@@ -62,7 +62,7 @@ jcmp.events.Add('battleroyale_updates', function() {
     }*/
 
     try {
-      if(!battleroyale.utils.IsPointInCircle(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) && !player.battleroyale.warning) {
+      if(!battleroyale.utils.IsPointInCircle2D(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) && !player.battleroyale.warning) {
 
         player.battleroyale.warning = true;
         battleroyale.chat.send(player, "You're not in the battle area, if u dont return to the battle area we're gonna kill u in 1 minute");
@@ -73,7 +73,7 @@ jcmp.events.Add('battleroyale_updates', function() {
         // And blah blah blah
       }
 
-      if(player.battleroyale.warning && battleroyale.utils.IsPointInCircle(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) || !player.battleroyale.ingame) {
+      if(player.battleroyale.warning && battleroyale.utils.IsPointInCircle2D(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) || !player.battleroyale.ingame) {
         player.battleroyale.warning = false;
         jcmp.events.CallRemote('outarea_toggle', player, false);
       }
@@ -108,21 +108,16 @@ jcmp.events.Add('battleroyale_start_battle', function() {
   var playersToTP = battleroyale.game.players.onlobby;
   battleroyale.game.players.onlobby = [];
   playersToTP.forEach(function(p) {
-    //let p = battleroyale.game.players.onlobby[i];
 
-    //console.log("+ ================= +")
-    //console.log("Player " + i);
-    //console.log(p);
     p.battleroyale.game = BRGame;
     p.battleroyale.ingame = true;
     p.dimension = BRGame.id;
-    battleroyale.game.players.ingame.push(p);
-    BRGame.players.push(p);
+    battleroyale.game.players.ingame.push(p); // Use concat instead? or better ingame.push.apply(ingame, playersToTP);
+    BRGame.players.push(p); // Put directly into the array maybe?
 
     p.position = battleroyale.utils.randomSpawn(startPosition, battleroyale.config.game.battle_StartRadius);
     p.GiveWeapon(2621157955, 398, true); // CS Preador
-    //battleroyale.game.players.onlobby.remove(p);
-    //console.log(" + ============= + ");
+
   })
 
   BRGame.aliveStarted = BRGame.players.length;
