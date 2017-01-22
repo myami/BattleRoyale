@@ -49,33 +49,33 @@ jcmp.events.Add('battleroyale_updates', function() {
 
   })
 
-  //for(let player of battleroyale.game.players.ingame) {
-  //for(var i = 0; i < battleroyale.game.players.ingame.length; i++) {
   battleroyale.game.players.ingame.forEach(function(player) {
-    /*var player = battleroyale.game.players.ingame[i];
-    console.log(battleroyale.game.players.ingame[i]);
-    console.log(player);*/
 
-    /*if(typeof(player === 'undefined')) {
-      //console.log("Es undefined premo");
-      //continue;
-    }*/
 
     try {
       if(!battleroyale.utils.IsPointInCircle2D(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) && !player.battleroyale.warning) {
 
         player.battleroyale.warning = true;
-        battleroyale.chat.send(player, "You're not in the battle area, if u dont return to the battle area we're gonna kill u in 1 minute");
+        battleroyale.chat.send(player, "You're not in the battle area, if u dont return to the battle area you can die in around 1 minute");
         jcmp.events.CallRemote('outarea_toggle', player, true);
-        //battleroyale.chat.send(player, "You're not in the battle area, if u dont return to the battle area we're gonna kill u in 1 minute");
+
         // Timer in X minute
         // Make var for check if the player was already warned
         // And blah blah blah
+
+        const done = battleroyale.workarounds.watchPlayerIntv(player, player.battleroyale.dieTimer = setInterval(() => {
+          done();
+          player.health -= 14;
+          //console.log("killing " + player.name);
+        }, 1000));
+
       }
 
       if(player.battleroyale.warning && battleroyale.utils.IsPointInCircle2D(player.position, player.battleroyale.game.position, player.battleroyale.game.radius) || !player.battleroyale.ingame) {
         player.battleroyale.warning = false;
         jcmp.events.CallRemote('outarea_toggle', player, false);
+        clearInterval(player.battleroyale.dieTimer);
+        //player.battleroyale.deadTimer(); // Clear interval
       }
 
     } catch(ex) {
@@ -94,31 +94,36 @@ jcmp.events.Add('battleroyale_start_battle', function() {
   battleroyale.game.gamesCount++;
   battleroyale.game.toStart = false;
 
-  var spawnPositions = require('../gm/BRSpawnList.js');
+  //var spawnPositions = require('../gm/BRSpawnList.js');
   //var startPosition = spawnPositions[battleroyale.utils.random(0, spawnPositions.length - 1)];
   var startPosition = new Vector3f(-12561.109375, 4301.36865234375, -12055.4267578125);
 
-  console.log("Start position X: " + startPosition.x + " Y: " + startPosition.y + " Z: " + startPosition.z);
-  //console.log(battleroyale.game.players.onlobby);
-  console.log(battleroyale.game.players.onlobby.length);
+  /*console.log("Start position X: " + startPosition.x + " Y: " + startPosition.y + " Z: " + startPosition.z);
+  console.log(battleroyale.game.players.onlobby);
+  console.log(battleroyale.game.players.onlobby.length);*/
 
-  var BRGame = new battleroyale.BRGame(battleroyale.game.gamesCount, startPosition);
-  console.log("Creating new game with ID: " + battleroyale.game.gamesCount);
-  //for(var i = 0; i <= battleroyale.game.players.onlobby.length; i++) {
   var playersToTP = battleroyale.game.players.onlobby;
   battleroyale.game.players.onlobby = [];
+
+  var BRGame = new battleroyale.BRGame(battleroyale.game.gamesCount, startPosition, playersToTP);
+  console.log("Creating new game with ID: " + battleroyale.game.gamesCount);
+
+  // Add players to array
+  battleroyale.game.players.ingame.push.apply(battleroyale.game.players.ingame, playersToTP);
+
   playersToTP.forEach(function(p) {
 
     p.battleroyale.game = BRGame;
     p.battleroyale.ingame = true;
     p.dimension = BRGame.id;
-    battleroyale.game.players.ingame.push(p); // Use concat instead? or better ingame.push.apply(ingame, playersToTP);
-    BRGame.players.push(p); // Put directly into the array maybe?
+    BRGame.poi.SetVisibleForPlayer(p, true); // Check if only shows the poi for the players in the same dimension or not
+    //battleroyale.game.players.ingame.push(p); // Use concat instead? or better ingame.push.apply(ingame, playersToTP);
+    //BRGame.players.push(p); // Put directly into the array maybe?
 
     p.position = battleroyale.utils.randomSpawn(startPosition, battleroyale.config.game.battle_StartRadius);
-    p.GiveWeapon(2621157955, 398, true); // CS Preador
+    p.GiveWeapon(2621157955, 999, true); // CS Preador
 
-  })
+  });
 
   BRGame.aliveStarted = BRGame.players.length;
 
@@ -169,6 +174,7 @@ jcmp.events.Add('battleroyale_end_battle', function(BRGame)
   }
 
   clearInterval(BRGame.reduceArea_timer);
+  BRGame.poi.Destroy();
   battleroyale.game.games.remove(BRGame);
 
 
@@ -198,14 +204,12 @@ jcmp.events.Add("battleroyale_player_leave_game", function(player, destroy) {
   console.log("Removing player from game array players");
 
   console.log("Players in array: " + player.battleroyale.game.players.length);
+
   if(!destroy) {
     battleroyale.game.players.onlobby.push(player);
   }
 
 
-  //player.battleroyale.ready = false;
-
-  //       player.battleroyale.game = false;
 });
 
 

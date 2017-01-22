@@ -195,7 +195,7 @@ module.exports = ({ Command, manager }) => {
   }))
 
   .add(new Command('distancetolobby').description("Shows the distance between you and the lobby point").handler(function(player) {
-    battleroyale.chat.send(player, "Distance: " + battleroyale.utils.GetDistanceBetweenPointsX(player.position, battleroyale.config.game.lobbypos));
+    battleroyale.chat.send(player, "Distance: " + battleroyale.utils.GetDistanceBetweenPointsXZ(player.position, battleroyale.config.game.lobbypos));
   }))
 
   .add(new Command('spawnObject').description("Spawns a object in ur position").parameter('objectName', 'string').handler(function(player, objectName) {
@@ -213,21 +213,36 @@ module.exports = ({ Command, manager }) => {
       return battleroyale.chat.send(player, "You're not in a game");
     }
 
-    console.log("Distance to game pos " + battleroyale.utils.GetDistanceBetweenPointsX(player.position, player.battleroyale.game.position))
+    console.log("Distance to game pos " + battleroyale.utils.GetDistanceBetweenPointsXZ(player.position, player.battleroyale.game.position))
     console.log("Player position: " + JSON.stringify(player.position));
     console.log("Battle position: " + JSON.stringify(player.battleroyale.game.position));
 
   }))
 
   .add(new Command('createPOI').description('Creates a POI').parameter('type', 'number', 'POI type').parameter('name', 'string', 'POI name', { isTextParameter: true }).handler(function(player, type, name) {
-    var aPOI = new POI(type, player.position, name);
-    aPOI.visible = false;
-    aPOI.clampedToScreen = true;
+    var position = new Vector3f(player.position.x, player.position.y, player.position.z);
+    var aPOI = new POI(type, position, name);
+    aPOI.position = player.position;
     aPOI.dimension = player.dimension;
+    aPOI.maxDistance = 4000;
+    aPOI.minDistance = 1;
+    aPOI.clampedToScreen = true;
+    console.log(aPOI);
+    console.log("POI Created");
 
+  }))
 
-  }));
+  .add(new Command('playerobject').description('Shows the player object in console').handler(function(player) {
+    console.log(player);
+  }))
 
+  .add(new Command('poishowingame').description('Check is the POI of the game is show').handler(function(player) {
+    if(player.battleroyale.ingame) {
+      console.log("POI Showed for player: " + player.battleroyale.game.poi.IsVisibleForPlayer(player));
+    } else {
+      battleroyale.chat.send(player, "You're not in a game");
+    }
+  }))
 
 
 

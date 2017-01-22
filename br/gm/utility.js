@@ -235,7 +235,7 @@ module.exports = class Utility {
     }
 
     static IsPointInCircle2D(v1, v2, radius) {
-      return this.GetDistanceBetweenPointsX(v1, v2) <= radius;
+      return this.GetDistanceBetweenPointsXZ(v1, v2) <= radius;
     }
 
     static IsPointInCylinder(v1, v2, radius, h) { // h is the height of the cylinder radius in altitude
@@ -245,8 +245,8 @@ module.exports = class Utility {
         return false;
     }
 
-    static GetDistanceBetweenPointsX(v1, v2) {
-      return this.GetDistanceBetweenPoints(new Vector3f(v1.x,0,0), new Vector3f(v2.x,0,0));
+    static GetDistanceBetweenPointsXZ(v1, v2) {
+      return this.GetDistanceBetweenPoints(new Vector3f(v1.x,0,v1.z), new Vector3f(v2.x,0,v2.z));
     }
 
     static GetDistanceBetweenPoints(v1, v2)
@@ -269,8 +269,8 @@ module.exports = class Utility {
 
 Array.prototype.removePlayer = function(player) {
 
-  var index = this.findIndex(function(e) {
-    return e.client.steamId === player.client.steamId;
+  var index = this.findIndex(function(p) {
+    return p.client.steamId === player.client.steamId;
   });
 
   if(index >= 0) this.splice(index, 1);

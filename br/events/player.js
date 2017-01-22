@@ -139,6 +139,10 @@ jcmp.events.Add("PlayerDeath", (player, killer, reason) => {
     jcmp.events.Call('battleroyale_player_leave_game', player);
   }
 
+  if(player.battleroyale.warning) {
+    clearInterval(player.battleroyale.dieTimer);
+  }
+
   battleroyale.chat.send(player, 'You will be respawned in the lobby.', battleroyale.config.colours.purple);
 
   const pos = battleroyale.config.game.lobbypos;
