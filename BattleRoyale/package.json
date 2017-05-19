@@ -1,0 +1,10 @@
+{
+    "authors":[ "Daranix", "Myami" ],
+    "jcmp_dependencies": [
+        "chat",
+        "command-manager"
+    ],
+    "license":"MIT",
+    "name":"BattleRoyale",
+    "version":"1.0.0"
+}
