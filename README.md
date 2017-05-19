@@ -8,7 +8,7 @@ Copy the files into you're server/packages folder
 2. TeamBattle (team of 2 to 4 player)
 3. More coming...
 
-##Changelog
+## Changelog
 1. Rewriting clientside
 2. Rewriting serverside
 3. Add more UI
