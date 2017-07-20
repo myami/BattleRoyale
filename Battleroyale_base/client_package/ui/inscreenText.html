@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BATTLEROYALE - INSCREEN TEXT</title>
+    <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+    <style type="text/css">
+
+        body {
+            margin: 0;
+            user-select: none;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        #playersLeft_container {
+            position: absolute;
+            bottom: 5px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 20pt;
+        }
+
+        #timerStart_container {
+            /*position: absolute;
+            bottom: calc(16px + 15% + 105px);
+            right: 5px;*/
+            text-align: center;
+            font-size: 24pt;
+        }
+
+        .textBase {
+            font-family: 'Passion One', cursive;
+            font-weight: bold;
+            color: orange;
+            -webkit-text-fill-color: orange;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: black;
+        }
+
+        .textImportant {
+            color: red;
+            -webkit-text-fill-color: red;
+        }
+
+        #playersGameLeft_container {
+            position: absolute;
+            text-align: center;
+            font-size: 24pt;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="playersLeft_container" class="textBase hidden">
+        <p>NEED <span id="needPlayers" class="textImportant">5</span> PLAYERS TO START</p>
+    </div>
+
+    <div id="timerStart_container" class="textBase hidden">
+        <p class="timeText">TIME LEFT TO START <br>THE NEXT BATTLE <br><span id="timeMinutes" class="textImportant">02</span>:<span id="timeSeconds" class="textImportant">00</span></p>
+    </div>
+
+    <div id="playersGameLeft_container" class="textBase hidden">
+        <p><span id="npleft" class="textImportant">0</span> PLAYERS LEFT OF <span id="npstart" class="textImportant">0</span></p>
+    </div>
+    <!--
+    <script src="debug_cef_jcmp_eventEmulator.js"></script>
+    -->
+    <script>
+
+        var timerStart;
+
+        function toggleContainer(container, status) {
+            // Status true = SHOW, false = HIDE
+            if(status != null) {
+                if(status) {
+                    document.getElementById(container).classList.remove("hidden");
+                } else {
+                    document.getElementById(container).classList.add("hidden");
+                }
+            } else {
+                document.getElementById(container).classList.toggle("hidden");
+            }
+        }
+
+        jcmp.AddEvent("battleroyale_txt_gameleftplayers_setnpstart", function(nstart) {
+            document.getElementById("npstart").innerText = nstart;
+        });
+
+        jcmp.AddEvent("battleroyale_txt_gameleftplayers_show", function(nleft) {
+            var element = document.getElementById("playersGameLeft_container");
+            document.getElementById("npleft").innerText = nleft;
+
+            element.classList.remove("hidden")
+            setTimeout(function() {
+                element.classList.add("hidden");
+            }, 5000)
+        });
+
+        jcmp.AddEvent('battleroyale_txt_leftplayers_toggle', function(status) {
+            toggleContainer("playersLeft_container", status);
+        });
+
+        jcmp.AddEvent('battleroyale_txt_timeleft_toggle', function(status) {
+            toggleContainer("timerStart_container", status);
+        });
+
+        jcmp.AddEvent('battleroyale_txt_timerStart', function(start) {
+            if(start) { // START INTERVAL
+                toggleContainer("timerStart_container", true);
+                console.log("Timer started");
+                timerStart = setInterval(UpdateTimer, 1000);
+            } else { // STOP INTERVAL
+                toggleContainer("timerStart_container", false);
+                console.log("Timer end")
+                clearInterval(timerStart);
+                // RESET TIMER
+                document.getElementById("timeMinutes").innerText = "02";
+                document.getElementById("timeSeconds").innerText = "00";
+            }
+        })
+
+        jcmp.AddEvent('battleroyale_txt_needPlayers', function(need) {
+            console.log(need);
+            document.getElementById("needPlayers").innerText = need;
+        });
+
+        jcmp.AddEvent('battleroyale_txt_updateTime', function(ms) {
+
+            var time = Math.floor(ms / 1000);
+
+            var minutes = Math.floor(time / 60);
+            var seconds = time - minutes * 60;
+
+            document.getElementById("timeMinutes").innerText = PutZero(minutes);
+            document.getElementById("timeSeconds").innerText = PutZero(seconds);
+
+        });
+
+        function UpdateTimer() {
+            var time = (parseInt(document.getElementById("timeMinutes").innerText) * 60) + parseInt(document.getElementById("timeSeconds").innerText) - 1;
+
+            var minutes = Math.floor(time / 60);
+            var seconds = time - minutes * 60;
+
+            document.getElementById("timeMinutes").innerText = PutZero(minutes);
+            document.getElementById("timeSeconds").innerText = PutZero(seconds);
+
+        }
+
+        function PutZero(n) {
+            if(n >= 0 && n <= 9) {
+                return "0"+n;
+            }
+            return n;
+        }
+
+        // DEBUG FUNCTIONS ---
+
+        function showElements() {
+            jcmp.CallEvent('battleroyale_txt_timeleft_toggle', true)
+            jcmp.CallEvent('battleroyale_txt_leftplayers_toggle', true)
+        }
+
+        //showElements();
+
+        jcmp.CallEvent('battleroyale_txt_ready');
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+
+body {
+  background-color: transparent !important;
+}
+
+.banlist-searchBox-container {
+  margin-top: 20px;
+  padding-right: 20px !important;
+}
+
+.refreshBtn:hover .fa-spin-hover {
+  animation: spin 2s infinite linear;
+}
+
+.adminPanel_content {
+  display: block;
+  border: 1px solid grey;
+  border-radius: 10px;
+  background-color: #2A3F54 !important;
+  color: white;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.little-title {
+  font-size: 18px;
+}
+
+.playerList-head {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.adminPanel_content .modal-body {
+
+}
+
+.adminPanel_content .modal-header .close {
+   color: transparent;
+}
+
+.column {
+  height: 50vh;
+}
+
+.banlist {
+  overflow-y: auto;
+}
+
+.tableplayers {
+  width: 100%;
+}
+
+.tableplayers tbody tr td{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.tableplayers tbody tr {
+  background-color: blue;
+  border-spacing: 0 5px;
+}
+
+
+.vertical-menu-list {
+  list-style: none;
+  padding:0;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  margin:0;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.vertical-menu-list li {
+  padding: 10px;
+  width: 100%;
+  background-color: #1a2633;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-bottom: 3px;
+}
+
+.vertical-menu-list li:hover {
+  background-color: #3d5676;
+  cursor: pointer;
+}
+
+.vertical-menu-list li:active {
+  background-color: #344965;
+}
+
+.vertical-menu-list li.clicked {
+  background-color: #344965;
+}
+
+.rightBox {
+
+}
+
+.playerInfo {
+  bottom:0;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 10px !important;
+}
+
+.OptionsBox {
+  display: block;
+}
+
+.OptionsBox .vertical-menu-list {
+  height: auto;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.OptionsBox .vertical-menu-list li {
+  display: inline-block;
+  width: auto;
+  margin:0px;
+}
+
+.modal-footer {
+  margin-top: 5px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  color: white !important;
+  font-weight: bold;
+  background-color: #2A3F54 !important;
+}
+.nav-tabs>li>a {
+  color:  #00cc99;
+  font-weight: bold;
+}
+
+.table_playerInfo tr td:first-child {
+  font-weight: bold;
+}
+
+.table_playerInfo tr td {
+  padding: 5px;
+}
+
+
+.dropdown-active {
+  background-color: #4286f4 !important;
+  color: white !important;
+}
+
+.dropdown-active:hover {
+  background-color: rgba(66, 134, 244, 0.8) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #223344 !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table-hover .details {
+  color: #ff9900;
+}
+
+.banDetails tr {
+  border-bottom: 2px solid #f2f2f2;
+}
+
+.banDetails tr td {
+  padding: 5px;
+}
+
+.banDetails tr td:first-child {
+  font-weight: bold;
+}
+
+.BanReason {
+  padding-left: 5px;
+  margin-top: 5px;
+}
+
+.BanReason p {
+  padding: 5px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+.bootstrap-dialog .modal-header {
+  font-weight: bold;
+}
+
+.tooltip-cars > .tooltip-inner {
+  background-color: #609dff;
+  border: 3px solid black;
+}
+
+.tooltip-cars .title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#weaponContainer {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+/* WEBKIT SCROLL */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #000000;
+}
+::-webkit-scrollbar-track {
+  background: #666666;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

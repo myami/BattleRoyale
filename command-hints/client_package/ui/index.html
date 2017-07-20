@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JC3:MP Chat Command Hints</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body style="background: transparent">
+    <div id="app">
+      <div id="command-hints" v-show="typing && buf.startsWith('/')">
+        <ul v-if="availableCommands.length > 1 && typingCommand">
+          <template v-for="cmd in availableCommands">
+          <li><strong>{{buf}}</strong>{{ cmd.trigger.substr(buf.length - 1) }}<span v-if="typeof cmd.description !== 'undefined'"> - <em>{{ cmd.description }}</em></span></li>
+          </template>
+        </ul>
+        <div v-if="(availableCommands.length === 1 || (availableCommands.length > 1 && '/' + availableCommands[0].trigger === buf)) && !switchToParam && typingCommand" v-html="availableCommands[0].usage"></div>
+        <div v-if="(availableCommands.length === 1 || (availableCommands.length > 1 && buf.startsWith('/' + availableCommands[0].trigger + ' '))) && switchToParam">
+          <div v-html="availableCommands[0].lessUsage"></div>
+          <div v-if="availableHints.length > 0">
+            <h3>Available Sub-Commands</h3>
+            <ul>
+              <template v-for="hint in availableHints">
+              <li v-html="hint.replace(hintRegex, '<strong>$&</strong>')"></li>
+              </template>
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  <script type="text/javascript" src="./vue.min.js"></script></body>
+  <script type="text/javascript" src="./app.js"></script></body>
+</html>

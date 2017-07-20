@@ -1,0 +1,12 @@
+{
+    "authors":[ "Daranix", "Myami" ],
+    "jcmp_dependencies": [
+        "chat",
+        "command-manager",
+        "jcmp-toast",
+        "hashes"
+    ],
+    "license":"MIT",
+    "name":"battleroyale",
+    "version":"1.0.0"
+}

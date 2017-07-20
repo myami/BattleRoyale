@@ -1,0 +1,35 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "script"
+  },
+    "env": {
+    "node": true
+  },
+  "plugins": [],
+  "globals": {
+    "Vector2": false,
+    "Vector2f": false,
+    "Vector3": false,
+    "Vector3f": false,
+    "Vector4": false,
+    "Vector4f": false,
+    "RGB": false,
+    "RGBA": false,
+    "Vehicle": false,
+    "POI": false,
+    "Checkpoint": false,
+    "events": false,
+    "Package": false,
+    "jcmp": false,
+    "utility": false
+  },
+  "rules": {
+    "new-cap": [1, {                 // http://eslint.org/docs/rules/new-cap
+      "capIsNewExceptions": ["GiveWeapon", "Call", "Add", "CallRemote", "AddRemoteCallable", "Respawn", "SetTime", "Destroy"]
+    }],
+    "no-param-reassign": [1, {
+      "props": false
+    }]
+  }
+}

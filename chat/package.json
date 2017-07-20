@@ -1,0 +1,22 @@
+{
+    "authors":
+    [],
+    "jcmp_dependencies":
+    [],
+    "license":"MIT",
+    "main":"",
+    "name":"chat",
+    "version":"1.0.0",
+    
+    "devDependencies": {
+        "eslint": "^3.4.0",
+        "eslint-config-airbnb-base": "^5.0.3",
+        "eslint-plugin-import": "^1.14.0"
+    },
+    
+    "scripts": {
+        "lint": "./node_modules/.bin/eslint **/*.js",
+        "build_ui": "cd client_package/ui/.src && npm run build",
+        "build": "npm run build_ui"
+    }
+}

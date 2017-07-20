@@ -1,0 +1,214 @@
+<html>
+
+<head>
+	<title>JC3:MP Minimap</title>
+	<link rel="stylesheet" href="leaflet.css" />
+	<style>
+		body {
+			margin: 0px;
+			color: #fff;
+		}
+
+		.mapcontainer {
+			height: 20%;
+			width: 15%;
+			position: fixed !important;
+			border: 2px solid black;
+			border-bottom: 0;
+		}
+		
+		#map {
+			/*border-radius: 50%;*/
+			opacity: 0.85;
+			height: 100%;
+		}
+		
+		.pos-upperleft {
+			left: 20px;
+			top: 20px;
+		}
+		
+		.pos-upperright {
+			right: 20px;
+			top: 20px;
+		}
+		
+		.pos-bottomleft {
+			left: 20px;
+			bottom: 20px;
+		}
+		
+		.pos-bottomright {
+			right: 20px;
+			bottom: 20px;
+		}
+		
+		/*.arrow {
+			background-image: url('images/arrow.png');
+			width: 40px;
+			height: 40px;
+			z-index: 1;
+			background-size: cover;
+			left: calc(50% - 40px);
+			top: calc(50% - 40px);
+			position: relative;
+		}*/
+
+		.flex-container {
+			height: 100%;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.row {
+			width: auto;
+			z-index: 1;
+		}
+
+		.arrow {
+			background: url('images/arrow.png') no-repeat;
+			width: 40px;
+			height: 40px;
+			text-align: center;
+			background-size: contain;
+		}
+		
+		.leaflet-container {
+			background: #152f3a;
+		}
+		
+		.leaflet-control-attribution {
+			background: transparent;
+		}
+		
+		.leaflet-control-attribution a {
+			color: transparent;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="pos-bottomright mapcontainer">
+		<div id="map">
+			<!--
+			<div class="arrow"></div>
+			-->
+
+			<div class="flex-container">
+				<div class="row"> 
+					<div class="arrow"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script src="jquery.js"></script>
+	<script src="leaflet.js"></script>
+	<script src="leaflet.label.js"></script>
+	<script>
+            /**
+			* Some super cool advanced options!!!
+			*/
+			let rotationActive = true;
+			let transparentMode = false;
+
+            let map = L.map('map', {
+				crs: L.CRS.Simple
+			}).setView([0, 0], 4);
+
+            L.tileLayer('tiles/{z}/{y}/{x}.png', {
+                attribution: '',
+                maxZoom: 4,
+                continuousWorld: true,
+                noWrap: false
+            }).addTo(map);
+
+            // disable map controls
+            map.dragging.disable();
+            map.touchZoom.disable();
+            map.doubleClickZoom.disable();
+            map.scrollWheelZoom.disable();
+            map.boxZoom.disable();
+            map.keyboard.disable();
+            if (map.tap) map.tap.disable();
+            document.getElementById('map').style.cursor = 'default';
+            $(`.leaflet-control-container`).remove();
+
+			function pan(lat, lng) {
+				let s = 0.78111749;
+				lat = (lat * s) - 128;
+				lng = (lng * s) + 128;
+				map.panTo([lat, lng], {
+					easeLinearity: 1,
+					duration: 0.1
+				});
+			};
+
+			if (transparentMode) {
+				$('#internalCustomStyle').remove();
+				$('head').append(`<style id="internalCustomStyle" type="text/css">.leaflet-container { background: rgba(0, 0, 0, 0); } #map { border: 0px solid rgba(0, 0, 0, 0); } </style>`);
+			}
+
+            // Updates the Map
+            const interval = setInterval(() => {
+                jcmp.CallEvent('minimap_getLocalPlayerPos');
+                jcmp.CallEvent('minimap_getLocalPlayerRot');
+            }, 50);
+
+            jcmp.AddEvent('minimap_setLocalPlayerPos', (pos) => {
+                pos = JSON.parse(pos);
+                pan(pos[0], pos[1]);
+            });
+
+            jcmp.AddEvent('minimap_setLocalPlayerRot', (rot) => {
+                if(rotationActive) {
+					//'transition': '50ms ease all',
+                    $('.arrow').css({
+                        'transform': 'rotateZ(' + rot + 'deg)'
+                    });
+                }
+            });
+
+            jcmp.AddEvent('minimap_clear', (data) => {
+
+            });
+
+            jcmp.AddEvent('minimap_addText', (data) => {
+
+            });
+
+			jcmp.AddEvent('minimap_setVisible', (toggle) => {
+				(toggle) ? $('#map').fadeIn('slow') : $('#map').hide();
+            });
+
+            jcmp.AddEvent('minimap_addCircle', (data) => {
+                L.circle([data['x'], data['y']], {
+                    radius: data['radius']
+                }).addTo(map);
+            });
+
+            jcmp.AddEvent('minimap_addCustomCSS', (css) => {
+                css = JSON.parse(css);
+                $('head').append(`<style id="${css['identifier']}" type="text/css">${css['data']['css']}</style>`);
+            });
+			
+			jcmp.AddEvent('minimap_changeStyle', (data) => {
+                style = JSON.parse(data);
+				if (data.type == 'transparent') {
+					$('#internalCustomStyle').remove();
+					$('head').append(`<style id="internalCustomStyle" type="text/css">.leaflet-container { background: rgba(0, 0, 0, 0); } #map { border: 0px solid rgba(0, 0, 0, 0); } </style>`);
+				}
+            });
+
+            jcmp.AddEvent('minimap_removeCSS', (identifier) => {
+                $(`#${identifier}`).remove();
+            });
+
+            jcmp.CallEvent('minimap_ready');
+        </script>
+</body>
+
+</html>

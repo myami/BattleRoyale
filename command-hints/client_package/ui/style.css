@@ -1,0 +1,28 @@
+#command-hints::-webkit-scrollbar			  { width: 6px; border-radius: 1px;}
+#command-hints::-webkit-scrollbar-button		  { visibility:hidden; }
+#command-hints::-webkit-scrollbar-track		  { background : rgba(255, 255, 255, 0.5); }
+#command-hints::-webkit-scrollbar-track-piece  { background: transparent; }
+#command-hints::-webkit-scrollbar-thumb		  { background-color:white; border-radius: 4px; }
+#command-hints::-webkit-scrollbar-corner		  { /* 6 */ }
+#command-hints::-webkit-resizer				  { /* 7 */ }
+
+#command-hints {
+  font-family: sans-serif;
+  position: fixed;
+  width: 100%;
+  height: auto;
+  left: -4px;
+  padding: 8px;
+  max-height: 90%;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  color: #fff;
+
+  overflow-y: scroll;
+  word-break: break-word;
+}
+
+#command-hints {
+    -webkit-user-select: none;
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATTLEROYALE - Loading screen</title>
+    <link rel="stylesheet" href="./css/loading.css">
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+        }
+
+        @font-face {
+            font-family: 'Rosewood fill';
+            src: url('./fonts/RosewoodStd-Fill.otf');
+        }
+
+        .text3d {
+            text-shadow: 0 1px 0 hsl(0, 0%, 0%),
+            0 2px 0 hsl(0, 0%, 0%),
+            0 3px 0 hsl(0, 0%, 0%),
+            0 4px 0 hsl(0, 0%, 0%),
+            0 5px 0 hsl(0, 100%, 35%),
+            0 6px 0 hsl(0, 100%, 35%),
+            0 7px 0 hsl(0, 100%, 35%),
+            0 8px 0 hsl(0, 100%, 35%),
+
+            0 0 5px rgba(0, 0, 0, .05),
+            0 1px 3px rgba(0, 0, 0, .2),
+            0 3px 5px rgba(0, 0, 0, .2),
+            0 5px 10px rgba(0, 0, 0, .2),
+            0 10px 10px rgba(0, 0, 0, .2),
+            0 20px 20px rgba(0, 0, 0, .3);
+        }
+
+        .battleroyale {
+            color: darkred;
+            font-size: 110px;
+            font-family: 'Rosewood fill';
+            text-align: center;
+            margin: 0;
+            letter-spacing: -3px;
+        }
+
+        .loading-mod {
+            font-weight: bold;
+            font-family: Arial;
+        }
+
+        .img-container {
+            text-align: center;
+        }
+
+        #container {
+            background: black;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="img-container">
+            <img src="./img/JC3MP.png" />
+        </div>
+
+        <h1 class="battleroyale text3d">BATTLEROYALE</h1>
+
+        <div id="loading-container" class="loading-container">
+            <div class="loading"></div>
+            <div id="loading-text" class="loading-mod">LOADING ... </div>
+        </div>
+    </div>
+
+
+    <script>
+        setInterval(function() {
+            document.getElementById("loading-container").classList.toggle('loading-hover')
+        }, 1000);
+
+        jcmp.AddEvent('battleroyale_loadscreen_toggle', function(show) {
+            if(!show) { // Show
+                document.getElementById("container").style.visibility = 'hidden';
+            } else { // Hide
+                document.getElementById("container").style.visibility = 'visible';
+            }
+        })
+    </script>
+
+</body>
+
+</html>

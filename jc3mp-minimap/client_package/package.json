@@ -1,0 +1,22 @@
+{
+  "name": "jc3mp-minimap",
+  "version": "1.0.1",
+  "description": "Features a minimap on clients UI",
+  "author": "Lukas 'derbl4ck' Berwanger",
+  "contributors": [],
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^2.2.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-react": "^5.2.2"
+  },
+  "settings": [
+    {
+      "name": "minimap_position",
+      "default": 0,
+      "input_type": "number",
+      "title": "Position of the Minimap in the UI",
+      "description": "Moves the Minimap from corner to corner"
+    }
+  ]
+}

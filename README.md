@@ -11,10 +11,13 @@ Copy the files into you're server/packages folder
 ## Changelog
 1. Rewriting clientside
 2. Rewriting serverside
-3. Add more UI
-4. Spawn random weapons on the ground with barrel(poi for 0.9.9 then gameobject when they will be available)
-5. Multiple Arena
+3. Change all the announce UI
+4. Spawn random weapons on the ground with barrel (texture for now then it will be gameobject)
+5. Limit area show ingame
 6. Add new deadscreen
+7. Adding Minimap and changing the healthbar
+8. Adding Daranix admin system
+9. Adding Daranix toast system
 
 ## Credits
 Created by Myami(FR) and Daranix(ES) and the help of LordFarquaad

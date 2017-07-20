@@ -1,0 +1,46 @@
+
+<div class="confirm_actionModals" style="display: none;">
+
+  <div id="confirm_banPlayer">
+    <div class="form-group">
+      <label for="comment">Reason:</label>
+      <textarea class="form-control" rows="5" id="banReason" placeholder="Cheating, spamming ..."></textarea>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon2"><b>Time</b></span>
+      <input type="number" id="banTime" class="form-control" aria-label="..." placeholder="0 = Permanent">
+
+      <div class="input-group-btn">
+        <button type="button" id="timeButton" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="TimeType" id="banTimeType" timeSelected="minutes">Minutes</span> <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right timeTypeSelector">
+          <li><a href="#" timetype="seconds">Second(s)</a></li>
+          <li><a href="#" class="dropdown-active" timetype="minutes">Minute(s)</a></li>
+          <li><a href="#" timetype="hours">Hour(s)</a></li>
+          <li><a href="#" timetype="days">Day(s)</a></li>
+        </ul>
+      </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+  </div>
+
+  <div id="confirm_kickPlayer">
+    <div class="form-group">
+      <label for="kickReason">Reason:</label>
+      <textarea class="form-control" rows="5" id="kickReason" placeholder="Spamming ..."></textarea>
+    </div>
+  </div>
+
+  <div id="confirm_setHP">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1"><b>Health Points</b></span>
+      <input type="number" class="form-control" id="HPPoints" placeholder="Number of HP" aria-describedby="basic-addon1">
+    </div>
+  </div>
+
+  <div id="confirm_freezePlayer">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">Time</span>
+      <input type="number" class="form-control" value="0" aria-describedby="basic-addon1">
+    </div>
+  </div>
+
+</div>

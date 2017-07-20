@@ -1,0 +1,215 @@
+
+  <div id="adminPanel" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content adminPanel_content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="welcomeMsg" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          <ul class="nav nav-tabs" id="navtabs-menu">
+            <li class="active"><a data-toggle="tab" href="#actions">Actions</a></li>
+            <li ng-click="reqUpdateBans()"><a data-toggle="tab" href="#banlist">Ban List</a></li>
+            <li><a data-toggle="tab" href="#spawnmenu">Spawn menu</a></li>
+            <li><a data-toggle="tab" href="#credits">Credits</a></li>
+          </ul>
+        </div>
+
+        <div class="tab-content">
+
+          <div id="actions" class="tab-pane fade in active">
+
+            <div class="row">
+              <div class="col-md-6 playerList" id="playerList">
+
+                <div class="playerList-head">
+                  <span class="little-title">Player list:</span>
+                  <button type="button" class="btn btn-primary btn-sm refreshBtn" style="float: right; font-weight:bold;" v-on:click="refreshPlayerList()"><span class="glyphicon glyphicon-refresh fa-spin-hover" aria-hidden="true"></span>&nbsp;Refresh</button>
+                </div>
+
+                <div class="playerList-content">
+                <ul class="vertical-menu-list column">
+                  <li v-for="(player, index) in playerList" :playerId="player.networkId" v-on:click="selectPlayer(index)" class="listPlayers">{{player.name}}</li>
+                </ul>
+                </div>
+              </div>
+
+              <div class="col-md-6 rightBox">
+                <h4>Player info:</h4>
+                <div id="playerInfo" class="playerInfo column">
+
+                  <table class="table_playerInfo">
+                    <tr>
+                      <td>Player name:</td>
+                      <td>{{selectedPlayer.name}}</td>
+                    </tr>
+                    <tr>
+                      <td>Network ID:</td>
+                      <td>{{selectedPlayer.networkId}}</td>
+                    </tr>
+                    <tr>
+                      <td>Admin rank:</td>
+                      <td>{{selectedPlayer.adminlevel}}</td>
+                    </tr>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <div class="OptionsBox" id="OptionsBox">
+                <ul class="vertical-menu-list">
+                    <li v-for="(option, index) in footerOptions" optionId="index" v-on:click="executeAction($event, index)">{{option.name}}</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="banlist" class="tab-pane fade">
+            <div class="banlist-header row">
+              <div class="col-md-6">
+                <h3>List of banned players</h3>
+                <h6><i>Click a player to see details</i></h6>
+              </div>
+              <div class="banlist-searchBox-container col-md-6">
+                <!--
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon" id="sizing-addon3"><b>Search</b></span>
+                  <input type="text" class="form-control" placeholder="Name/SteamID" ng-model="searchValue" ng-change="searchPlayer()" aria-describedby="sizing-addon3">
+                </div>
+                -->
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon" id="sizing-addon3"><b>Search</b></span>
+                  <input type="text" class="form-control" placeholder="Name/SteamID" v-model="searchPlayer" aria-describedby="sizing-addon3">
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="filterType">Name</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu filterSelector">
+                      <li><a class="dropdown-active" href="#">Name</a></li>
+                      <li><a href="#">Steam ID</a></li>
+                    </ul>
+                  </div><!-- /btn-group -->
+                </div><!-- /input-group -->
+              </div>
+            </div>
+
+            <div class="column banlist">
+
+              <table class="table table-hover table-condensed">
+
+                <thead>
+                  <th>Name</th>
+                  <th>SteamID</th>
+                  <th>Date banned</th>
+                  <th>Ban end day</th>
+                </thead>
+
+                <tbody>
+                  <tr v-show="!players_banlist.length">
+                    <td colspan=4>No bans to show</td>
+                  </tr>
+                  <tr v-for="(player, index) in players_banlist" v-on:click="banDetails(index)">
+                    <td>{{ player.name}}</td>
+                    <td>{{ player.steamId}}</td>
+                    <td>{{ player.date_start }}</td>
+                    <td>
+                      <div v-if="player.date_end == 0">
+                        Permanent
+                      </div>
+                      <div v-if="player.date_end >= 1">
+                        {{ player.date_end }}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+            
+            <div id="banDetails" style="display:none;">
+              <table class="banDetails">
+                <tr>
+                  <td>Name</td>
+                  <td>{{ bannedPlayer_info.name }}</td>
+                </tr>
+                <tr>
+                  <td>SteamID:</td>
+                  <td>{{ bannedPlayer_info.steamId }}</td>
+                </tr>
+                <tr>
+                  <td>Ban day:</td>
+                  <td>{{ bannedPlayer_info.date_start }}</td>
+                </tr>
+                <tr>
+                  <td>Ban expiration:</td>
+                  <td>
+                    <div v-if="bannedPlayer_info.date_end == 0">
+                      Never (Permanent)
+                    </div>
+                    <div v-if="bannedPlayer_info.date_end >= 1">
+                      {{ bannedPlayer_info.date_end }}
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Banned by:</td>
+                  <td>{{ bannedPlayer_info.bannedby.name }} <b>SteamID:</b> {{ bannedPlayer_info.bannedby.steamId }}</td>
+                </tr>
+              </table>
+
+              <div class="BanReason">
+                <b>Ban reason:</b>
+                <p>
+                  {{ bannedPlayer_info.reason }}
+                </p>
+              </div>
+            </div>
+            
+          </div>
+
+          <div id="spawnmenu" class="tab-pane fade">
+
+            <div>
+              <h3>Spawn Menu</h3>
+
+              <ul class="nav nav-tabs" id="spawnTabs">
+                <li v-for="(category, index) in categories"><a :href="refCategory(category)" data-toggle="tab">{{ category }}</a></li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="spawnTabsContent">
+              <div v-for="category in categories" class="tab-pane fade in" :id="refCategory(category).replace('#','')">
+                <h3>{{ category }}s</h3>
+                <ul class="vertical-menu-list column">
+                  <li v-for="vehicle in getVehicles(category)" class="list-vehicles" v-on:click="spawnVehicle(vehicle.hash)" data-toggle="tooltip" data-placement="left" :title="generateTooltip(vehicle)">
+                    <span class="vname">{{ vehicle.name }}</span>
+                    <span class="vmodel hidden">{{ vehicle.model_name }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="credits" class="tab-pane fade">
+            <h3>Admin tools by Daranix</h3>
+            <i>Copyright 2017 &copy;</i>
+            <br>
+            <br>
+            <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+            <br>
+            <a href="https://github.com/Daranix/jcmp-admin-system" target="_blank">Official repository</a>
+            <br>
+            <a href="https://github.com/Daranix/jcmp-toast" target="_blank">JCMP Toast repository</a>
+          </div>
+
+        </div> <!-- /. TABS content end -->
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal NG APP -->
+
+<script type="text/javascript-lazy" src="./js/spawnMenu_vehicles.js"></script>

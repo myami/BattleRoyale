@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./toast/jquery.toast.min.css">
+  <title>Just Cause Toast</title>
+</head>
+<body>
+
+  <script src="./jquery/jquery-3.1.1.min.js"></script>
+  <script src="./toast/jquery.toast.min.js"></script>
+
+  <script type="text/javascript">
+
+    jcmp.AddEvent('ui_toast_show', function(values) {
+      console.log(values);
+      var opts = JSON.parse(values);
+      console.log(opts);
+      $.toast(opts);
+    });
+
+  </script>
+</body>
+</html>

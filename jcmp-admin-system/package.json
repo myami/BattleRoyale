@@ -1,0 +1,16 @@
+{
+    "author": "Daranix",
+    "dependencies": {
+        "mongodb": "^2.2.22"
+    },
+    "description": "Just Cause 3 Multiplayer Administration Package",
+    "devDependencies": {},
+    "jcmp_dependencies": [
+        "jcmp-toast",
+        "command-manager"
+    ],
+    "license": "MIT",
+    "main": "main.js",
+    "name": "jcmp-adminsys",
+    "version": "1.0.0"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "hashes",
+  "author": "JC3:MP Team",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint **/*.js"  
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.14.0"
+  }
+}

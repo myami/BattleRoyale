@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            body 
+            {
+                width: 950px;
+                height: 950px;
+                border: 5px solid white;
+                border-radius: 1000px;
+                position: fixed;
+                margin: 0px 0px 0px 0px;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+    <script>
+        jcmp.AddEvent('battleroyale_render_setColor', function(color) {
+            document.querySelector("body").style.borderColor = color;
+        });
+    </script>
+</html>

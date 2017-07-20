@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATTLEROYALE - Healthbar</title>
+    <style type="text/css">
+
+        body {
+            margin: 0;
+            user-select: none;
+        }
+        
+        .healthbar {
+            background-color: rgba(36, 183, 71, 0.5);
+            border: 2px solid black;
+            position:fixed;
+            bottom: 6px;
+            right: 20px;
+            width: 15%;
+        }
+
+        .healthgreen {
+            height: 10px;
+            background-color: rgba(29, 140, 55, 0.7);
+        }
+
+        /*.mapboxexample {
+            position: fixed;
+            width: 15%;
+            height: 20%;
+            bottom: 20px;
+            right: 20px;
+            border: 2px solid red;
+        }*/
+
+    </style>
+</head>
+<body>
+    <!--
+    <div class="mapboxexample">
+    </div>
+    -->
+
+    <div class="healthbar" id="healthBackground">
+        <div class="healthgreen" id="healthPercent" style="width: 50%;">
+        </div>
+    </div>
+
+    <script>
+
+        jcmp.AddEvent('battleroyale_healthbar_update', function(data) {
+            data = JSON.parse(data);
+            //console.log(data);
+            var percent = (data.health / data.maxHealth ) * 100;
+            document.getElementById("healthPercent").style.width = percent + '%';
+            if(percent >= 51) {
+                // Green
+                document.getElementById("healthPercent").style.backgroundColor = 'rgba(29, 140, 55, 0.7)';
+                document.getElementById("healthBackground").style.backgroundColor = 'rgba(36, 183, 71, 0.5)';
+            } else if(percent <= 50 && percent > 25) {
+                // Yellow
+                document.getElementById("healthPercent").style.backgroundColor = 'rgba(232, 195, 16, 0.7)';
+                document.getElementById("healthBackground").style.backgroundColor = 'rgba(219, 185, 17, 0.5)';
+            } else {
+                // Red
+                document.getElementById("healthPercent").style.backgroundColor = 'rgba(204, 32, 20, 0.7)';
+                document.getElementById("healthBackground").style.backgroundColor = 'rgba(226, 33, 20, 0.5)';
+            }
+        });
+
+    </script>
+</body>
+</html>

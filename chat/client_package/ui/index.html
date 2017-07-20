@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JC3:MP Chat</title>
+    <link rel="stylesheet" href="./style.css" />
+    <style id="custom-css"></style>
+  </head>
+  <body>
+    <div id="app">
+      <chat inline-template>
+        <div v-show="visible" id="chat">
+          <div id="chat-box" v-bind:style="{ 'overflow-y': inputVisible ? 'scroll' : 'hidden' }">
+            <table>
+              <tbody>
+                <tr v-for="message in messages">
+                  <td v-bind:style="{ color: message.color }" v-html="message.text"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <input id="chat-input" v-show="visible && inputVisible" v-model="messageInput" type="text"
+            v-bind:maxlength="maxMessageLength"
+            v-on:keyup.enter="submit"
+            v-on:keyup.up="navigateHistory(false)"
+            v-on:keyup.down="navigateHistory(true)"
+            autofocus />
+        </div>
+      </chat>
+    </div>
+    <script type="text/x-template" id="chat-template">
+    </script>
+    <script type="text/javascript" src="./vue.min.js"></script>
+    <script type="text/javascript" src="./chat.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "command-hints",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint **/*.js",
+    "build_ui": "cd client_package/ui/.src && npm run build",
+    "build": "npm run build_ui"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.14.0"
+  },
+  "author": "Jan C. <jan.c@nanos.io>",
+  "license": "MIT",
+
+  "jcmp_dependencies": ["chat", "command-manager"]
+}

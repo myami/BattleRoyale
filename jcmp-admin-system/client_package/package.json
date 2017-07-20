@@ -1,0 +1,9 @@
+{
+  "author": "Daranix",
+  "license": "MIT",
+  "name": "jcmp-adminsys",
+  "version": "1.0.0",
+  "devDependencies": {
+    "vueify": "^9.4.1"
+  }
+}

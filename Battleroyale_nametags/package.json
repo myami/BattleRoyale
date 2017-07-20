@@ -1,0 +1,7 @@
+{
+    "authors": "Daranix",
+    "jcmp_dependencies": ["battleroyale"],
+    "license":"MIT",
+    "name": "battleroyale_nametags",
+    "version":"1.0.0"
+}

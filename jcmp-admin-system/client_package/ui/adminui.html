@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin panel UI</title>
+
+  <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
+  <!--
+  <script src="./lib/angular.min.js"></script>
+  
+  
+
+  
+  <script src="./lib/vue.js"></script>
+  -->
+  <!--
+    <script src="debug_cef_jcmp_eventEmulator.js"></script>
+  -->
+  <script src="./lib/vue.js"></script>
+  <script src="./lib/jquery/jquery-3.1.1.min.js"></script>
+  
+  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="./js/startup.js"></script>
+
+  
+  <link rel="stylesheet" href="./lib/bootstrap-dialog/bootstrap-dialog.min.css">
+  <script src="./lib/bootstrap-dialog/bootstrap-dialog.min.js"></script>
+
+  
+  <script src="./js/utils.js"></script>
+  <script src="./js/hashes.js"></script>
+  <script src="./js/actions.js"></script>
+  <script src="./js/panelScript_v2.js"></script>
+  
+
+</head>
+<body>
+
+  <div include-html="./ui_modules/mainPanel.html"></div>
+  <div include-html="./ui_modules/confirmModals.html"></div>
+  <div include-html="./ui_modules/weaponMenuModal.html"></div>
+
+
+  <script>
+
+  includeHTML(function() {
+    loadVue();
+  });
+  
+  </script>
+  <test></test>
+</body>
+</html>

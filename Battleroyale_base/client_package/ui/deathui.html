@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATTLEROYALE - DEATH UI </title>
+    <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+    <style type="text/css">
+        body {
+            margin: 0;
+            user-select: none;
+        }
+
+        #deathcontent {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            text-align: center;
+            font-family: 'Passion One', cursive;
+            color: white;
+            -webkit-text-fill-color: white;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: black;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        #killerName {
+            -webkit-text-fill-color: red;
+        }
+
+        #respawnTime {
+            -webkit-text-fill-color: red;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <div id="deathcontent" style="transition: opacity 500ms; opacity: 0;" >
+
+        <img src="./img/deathimg.png" width="30%" height="45%"/>
+
+        <h1>You are dead</h1>
+        <h2>Killed by <span id="killerName">ExampleName</span></h2>
+        <h3>Don't worry you will respawn in the lobby on <span id="respawnTime">5</span> seconds ..</h4>
+    </div>
+
+    <script>
+
+        function fadeIn(el) {
+            console.log(el);
+            el.style.visibility = 'visible';
+            el.style.opacity = 1; 
+        }
+
+
+        function fadeOut(el) {
+            el.style.opacity = 0;
+            setTimeout(function() {
+                el.style.visibility = 'hidden'; 
+            }, 1000);
+        }
+        
+        jcmp.AddEvent('battleroyale_deathui_show', function(killerName) {
+
+            // TODO: Reproduce sound as myami requested
+
+            document.getElementById("respawnTime").innerText = "5";
+            document.getElementById("killerName").innerText = killerName;
+            fadeIn(document.getElementById("deathcontent"));
+
+            var deathUItimer = setInterval(function() {
+                document.getElementById("respawnTime").innerText = parseInt(document.getElementById("respawnTime").innerText) - 1;
+                if(parseInt(document.getElementById("respawnTime").innerText) === 0) {
+                    fadeOut(document.getElementById("deathcontent"));
+                    clearInterval(deathUItimer);
+                }
+            }, 1000);
+
+        });
+        
+
+    </script>
+</body>
+</html>
