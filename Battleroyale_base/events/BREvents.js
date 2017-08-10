@@ -73,9 +73,9 @@ jcmp.events.Add('battleroyale_updates', function () {
 
             if (player.battleroyale.ingame) {
                 // This check if the player is in the area of the game for all the players on the game
-                
+
                 for(let barrel of player.battleroyale.game.spawnWeaponPoints) {
-                    
+
                     if(battleroyale.utils.GetDistanceBetweenPoints(player.position, barrel.position) < 3.0) {
                         jcmp.events.Call('battleroyale_pickup_barrel', player, barrel);
                     }
@@ -93,7 +93,7 @@ jcmp.events.Add('battleroyale_updates', function () {
             } else {
                 // Players on lobby
             }
-            
+
         } // For loop into players
 
     } catch (e) {
@@ -222,7 +222,9 @@ jcmp.events.Add('battleroyale_player_leave_game', function (player, destroy) {
         battleroyale.game.players.onlobby.push(player);
         player.battleroyale.ingame = false;
         player.dimension = 0;
-
+        player.weapons.forEach(function(weapon){
+      player.RemoveWeapon(weapon.modelHash);
+    })
         const done = battleroyale.workarounds.watchPlayer(player, setTimeout(() => {
             done();
             // NOTE: Maybe include here the update needPlayers update event and the lobby push
