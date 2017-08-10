@@ -3,22 +3,42 @@
 module.exports = ({ Command, manager }) => {
   manager.category('admin', 'only usable by admins')
     .add(new Command('akick').parameter('target', 'string', 'networkId or (part of) name').optional('reason', 'string', 'reason', { isTextParameter: true }).description('kicks one or more players').handler((player, target, reason) => {
+      if(player.admin.rank < 1) {
+        adminsys.chat.send(player, "You're not allowed to use this command");
+        return;
+      }
       adminsys.actions.kickPlayer(player, {target: { networkId: target }, reason: reason});
     }))
 
     .add(new Command('asetrank').description('Set the admin rank of a player').parameter('target', 'string', 'networkId or (part of) name').parameter('rank', 'number', 'Rank number').description('Set the admin rank of a player').handler(function(player, target, rank) {
+      if(player.admin.rank < 1) {
+        adminsys.chat.send(player, "You're not allowed to use this command");
+        return;
+      }
       adminsys.actions.setAdminRank(player, {target: { networkId: target }, rank: rank});
     }))
 
     .add(new Command('aban').description('Ban a player ').parameter('target', 'string', 'networkId or (part of) name').parameter('time', 'number', 'Time of the ban 0 = Permanent').optional('timetype', 'string', 'days, hours, minutes or seconds').optional('reason', 'string', 'reason', { isTextParameter: true }).handler(function(player, target, time, timetype, reason) {
+      if(player.admin.rank < 1) {
+        adminsys.chat.send(player, "You're not allowed to use this command");
+        return;
+      }
       adminsys.actions.banPlayer(player, {target: { networkId: target }, time: time, timeType: timetype, reason: reason});
     }))
 
     .add(new Command('atp').description('Teleport yourself to a player').parameter('target', 'string', 'networkId or (part of) name').handler(function(player, target) {
+      if(player.admin.rank < 1) {
+        adminsys.chat.send(player, "You're not allowed to use this command");
+        return;
+      }
       adminsys.actions.tpPlayer(player, {target: { networkId: target }, here: false})
     }))
 
     .add(new Command('atphere').description('Teleport a player to your position').parameter('target', 'string', 'networkId or (part of) name').handler(function(player, target) {
+      if(player.admin.rank < 1) {
+        adminsys.chat.send(player, "You're not allowed to use this command");
+        return;
+      }
       adminsys.actions.tpPlayer(player, {target: { networkId: target }, here: true})
     }))
 
