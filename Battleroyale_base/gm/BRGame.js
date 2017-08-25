@@ -18,11 +18,11 @@ module.exports = class BRGame {
     battleroyale.game.players.onlobby = [];
     let self = this;
 
-
+    
     const spawnWeaponRenderPoints = this.spawnWeaponPoints.map(wp => ({
       position: { x: wp.position.x, y: wp.position.y, z: wp.position.z }
     }));
-
+    
     const gameData = {
       center: { x: self.position.x, y: self.position.y, z: self.position.z },
       diameter: self.radius,
@@ -35,14 +35,14 @@ module.exports = class BRGame {
     spawnArea.y += 1000; // More altitude
 
 
-
+    
     for(let player of this.players) {
 
       /*jcmp.events.CallRemote('battleroyale_txt_timerStart', player, false);
       jcmp.events.CallRemote('battleroyale_txt_leftplayers_toggle', false);*/
       //console.log(gameData);
       jcmp.events.CallRemote('battleroyale_client_gameStart', player, JSON.stringify(gameData));
-      jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',player,false); // if someone as not voted he will get the UI removed like the other that vote
+
       player.battleroyale.game = this;
       player.battleroyale.ingame = true;
 
@@ -77,7 +77,7 @@ module.exports = class BRGame {
       z: this.position.z
     });
 
-
+    
 
     for(let player of this.players) {
 
@@ -125,7 +125,7 @@ module.exports = class BRGame {
 
 
     this.updateBarrels();
-
+    
   }
 
   updateBarrels() {

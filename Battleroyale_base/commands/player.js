@@ -14,6 +14,5 @@ module.exports = ({
       player.Kick('exit');
     }))
 
-
     // Commands end ---
 }

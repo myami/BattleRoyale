@@ -13,13 +13,10 @@ jcmp.events.Add('battleroyale_updates', function () {
         battleroyale.utils.broadcastToLobby("The game is going to start in 2 minutes!");
 
         // Show and start timer and hide left players text on UI
-        //Show the vote
 
         for (let player of battleroyale.game.players.onlobby) {
             jcmp.events.CallRemote('battleroyale_txt_timerStart', player, true);
             jcmp.events.CallRemote('battleroyale_txt_leftplayers_toggle', player, false);
-            jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',player,true);
-
         }
 
 
@@ -112,7 +109,8 @@ jcmp.events.Add('battleroyale_start_battle', function () {
     battleroyale.game.toStart = false;
     battleroyale.game.timeToStart = battleroyale.config.game.timeToStart;
 
-    const arenaIndex = temphighindex;
+
+    const arenaIndex = battleroyale.utils.random(0, battleroyale.game.arenaList.length - 1);
     const battlePosition = battleroyale.game.arenaList[arenaIndex].position;
     const maxY = battleroyale.game.arenaList[arenaIndex].maxY;
     const battleArea_start = battleroyale.game.arenaList[arenaIndex].radius_start;
@@ -313,21 +311,4 @@ jcmp.events.Add('battleroyale_pickup_barrel', function(player, barrel) {
     const weaponList = battleroyale.hashes.get('weapons');
     const weaponHash = weaponList[battleroyale.utils.random(0, weaponList.length - 1)].hash;
     player.GiveWeapon(weaponHash, battleroyale.utils.random(10, 300), true);
-});
-
-jcmp.events.AddRemoteCallable('battleroyale_vote_volcano_server', function (player) {
-  let tempc = votearray[0] + 1;
-  votearray.splice(0,0,tempc);
-  jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',player,false);
-  jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',null,JSON.stringify(votearray));
-
-});
-
-jcmp.events.AddRemoteCallable('battleroyale_vote_city_server', function (player) {
-  let tempc = votearray[1] + 1;
-  votearray.splice(1,0,tempc);
-  jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',player,false);
-  jcmp.events.CallRemote('battleroyale_vote_toggle_text_client',null,JSON.stringify(votearray));
-
-
 });
