@@ -23,13 +23,11 @@ global.battleroyale = {
       games: [],
       gamesCount: 0,
       arenaList: require('./gm/arenaList.js'),
-      timeToStart: 0
+      timeToStart: 0,
+      votearray:[0,0]// same index as arenalist so for exemple 0=volcano on arenalist so on votearray the index 0 is the int for the vote for the volcano etc....
     },
     hashes: jcmp.events.Call('hashes_all')[0].data
-    /*arena:{
-      volcano: require('./arena/volcano.js'),
-      city: require('./arena/city.js')
-    }*/
+
 };
 
 console.log("+==========================================================================================+");

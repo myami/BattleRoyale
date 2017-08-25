@@ -44,7 +44,7 @@ jcmp.events.AddRemoteCallable('battleroyale_txt_leftplayers_toggle', function(st
 
 jcmp.events.AddRemoteCallable('battleroyale_txt_timeleft_toggle', function(status) {
     jcmp.ui.CallEvent('battleroyale_txt_timeleft_toggle', status);
-    
+
 });
 
 jcmp.events.AddRemoteCallable('battleroyale_txt_timerStart', function(start) {
@@ -107,11 +107,11 @@ jcmp.events.AddRemoteCallable('battleroyale_client_gameStart', function(data) {
 
     //jcmp.events.CallRemote('battleroyale_debug', data);
 
-    
+
 
     data = JSON.parse(data);
     jcmp.events.Call('battleroyale_txt_gameleftplayers_setnpstart', data.npstart);
-    
+
     maxY = data.maxY;
     center = new Vector3f(data.center.x, data.center.y, data.center.z);
     diameter = new Vector2f(data.diameter, data.diameter);
@@ -130,7 +130,7 @@ jcmp.events.AddRemoteCallable('battleroyale_client_gameStart', function(data) {
     }));
 
     //jcmp.events.CallRemote('battleroyale_debug', JSON.stringify(renderBarrels));
-    
+
 });
 
 jcmp.events.AddRemoteCallable('battleroyale_render_setColor', function(color) {
@@ -161,8 +161,28 @@ function CreateNewBorderMatrix()
     return m2;
 }
 
+// Vote system
+var vote = new WebUIWindow("Battleroyale vote system", "package://battleroyale/ui/vote.html", new Vector2(jcmp.viewportSize.x, jcmp.viewportSize.y));
 
-// WORK IN PROGRESS 
+jcmp.ui.AddEvent('battleroyale_vote_volcano', function() {
+    jcmp.events.CallRemote('battleroyale_vote_volcano_server');
+});
+jcmp.ui.AddEvent('battleroyale_vote_city', function() {
+    jcmp.events.CallRemote('battleroyale_vote_city_server');
+});
+
+jcmp.events.AddRemoteCallable('battleroyale_vote_toggle_text_client', function(toggle) {
+    jcmp.ui.CallEvent('battleroyale_vote_toggle_text', toggle);
+});
+
+jcmp.events.AddRemoteCallable('battleroyale_vote_text_client', function(votearray) {
+  let votedata = JSON.parse(votearray);
+    jcmp.ui.CallEvent('battleroyale_vote_text', votedata[0],votedata[1]);
+});
+
+
+// End of vote system
+// WORK IN PROGRESS
 
 const barrelTextureUI = new WebUIWindow("Barrel","package://battleroyale/ui/barrel.html", new Vector2(1405, 1405));
 //const barrelTexture = new Texture("package://battleroyale/ui/img/barrel.png");
@@ -206,11 +226,11 @@ jcmp.events.Add("GameUpdateRender", function(renderer) {
     } catch(err) {
         jcmp.events.CallRemote('battleroyale_debug', err.message)
     }
-    
+
     if(!lplayer.ingame) {
         return;
     }
-    
+
     renderer.SetTransform(m);
     const max_circles = 10;
     const max_delta = maxY;
@@ -241,5 +261,5 @@ jcmp.events.Add("GameUpdateRender", function(renderer) {
 // Loadscreen is the first thing to load but always when is visible, should be on the front
 loadScreenUI.BringToFront();
 } catch(err) {
- jcmp.events.CallRemote('battleroyale_debug', `CLIENTSIDE ERROR: ${err.message} on line: ${err.lineNumber}`);  
+ jcmp.events.CallRemote('battleroyale_debug', `CLIENTSIDE ERROR: ${err.message} on line: ${err.lineNumber}`);
 }
